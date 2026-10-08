@@ -335,11 +335,17 @@ Solvers:
 
 Applegate, David, Mateo Diaz Diaz, Oliver Hinder, et al. 2021. “Practical Large-Scale Linear Programming Using Primal-Dual Hybrid Gradient.” Paper presented Thirty-Fifth Conference on Neural Information Processing Systems. May 21. <https://openreview.net/forum?id=_eXwwWOyqT_>.
 
+Bast, Hannah, Daniel Delling, Andrew Goldberg, et al. 2016. “Route Planning in Transportation Networks.” In *Algorithm Engineering: Selected Results and Surveys*, edited by Lasse Kliemann and Peter Sanders. Lecture Notes in Computer Science. Springer International Publishing. <https://doi.org/10.1007/978-3-319-49487-6_2>.
+
 Besard, Tim, Christophe Foket, and Bjorn De Sutter. 2019. “Effective Extensible Programming: Unleashing Julia on GPUs.” *IEEE Transactions on Parallel and Distributed Systems* 30 (4): 827–41. <https://doi.org/10.1109/TPDS.2018.2872064>.
 
 Blin, Nicolas, Stefano Gualandi, Christopher Maes, Andrea Lodi, and Bartolomeo Stellato. 2026. “Batched First-Order Methods for Parallel LP Solving in MIP.” Version 1. Pre-published. <https://doi.org/10.48550/ARXIV.2601.21990>.
 
 Çördük, Akif, Piotr Sielski, Alice Boucher, and Kumar Aatish. 2025. “GPU-Accelerated Primal Heuristics for Mixed Integer Programming.” Pre-published October 23. <https://doi.org/10.48550/arXiv.2510.20499>.
+
+Delling, Daniel, Andrew V. Goldberg, Andreas Nowatzyk, and Renato F. Werneck. 2013. “PHAST: Hardware-Accelerated Shortest Path Trees.” *Journal of Parallel and Distributed Computing*, Best Papers: International Parallel and Distributed Processing Symposium (IPDPS) 2010, 2011 and 2012, vol. 73 (7): 940–52. <https://doi.org/10.1016/j.jpdc.2012.02.007>.
+
+Grand, Evan, and Michael Klamkin. 2026. “Lpviz: Interactive Linear Programming Visualization.” Pre-published April 30. <https://doi.org/10.48550/arXiv.2604.27518>.
 
 Hijma, Pieter, Stijn Heldens, Alessio Sclocco, Ben van Werkhoven, and Henri E. Bal. 2023. “Optimization Techniques for GPU Programming.” *ACM Comput. Surv.* 55 (11): 239:1–81. <https://doi.org/10.1145/3570638>.
 
@@ -349,15 +355,17 @@ Kepner, Jeremy, Peter Aaltonen, David Bader, et al. 2016. “Mathematical Founda
 
 Lu, Haihao, Zedong Peng, and Jinwen Yang. 2024. “MPAX: Mathematical Programming in JAX.” Pre-published December 12. <https://doi.org/10.48550/arXiv.2412.09734>.
 
-Lu, Haihao, and Jinwen Yang. 2025a. “An Overview of GPU-based First-Order Methods for Linear Programming and Extensions.” Pre-published June 2. <https://doi.org/10.48550/arXiv.2506.02174>.
+Lu, Haihao, and Jinwen Yang. 2025a. “An Overview of GPU-Based First-Order Methods for Linear Programming and Extensions.” Pre-published June 2. <https://doi.org/10.48550/arXiv.2506.02174>.
 
 Lu, Haihao, and Jinwen Yang. 2025b. “cuPDLP.jl: A GPU Implementation of Restarted Primal-Dual Hybrid Gradient for Linear Programming in Julia.” *Operations Research* 73 (6): 3440–52. <https://doi.org/10.1287/opre.2024.1069>.
+
+Mandi, Jayanta, James Kotary, Senne Berden, et al. 2024. “Decision-Focused Learning: Foundations, State of the Art, Benchmark and Future Opportunities.” *Journal of Artificial Intelligence Research* 80 (August): 1623–701. <https://doi.org/10.1613/jair.1.15320>.
 
 Merckx, Jules. 2025. “Building Bridges: Julia as an MLIR Frontend.” Pre-published February 14. <https://doi.org/10.48550/arXiv.2503.04771>.
 
 Nicusan, Andrei-Leonard, Dominik Werner, Simon Branford, Simon Hartley, Andrew J. Morris, and Kit Windows-Yule. 2025. “AcceleratedKernels.jl: Cross-Architecture Parallel Algorithms from a Unified, Transpiled Codebase.” Pre-published July 22. <https://doi.org/10.48550/arXiv.2507.16710>.
 
-Perumalla, Kalyan, and Maksudul Alam. 2021. “Design Considerations for GPU-based Mixed Integer Programming on Parallel Computing Platforms.” (New York, NY, USA), ICPP Workshops ’21, September 23, 1–7. <https://doi.org/10.1145/3458744.3473366>.
+Perumalla, Kalyan, and Maksudul Alam. 2021. “Design Considerations for GPU-Based Mixed Integer Programming on Parallel Computing Platforms.” (New York, NY, USA), ICPP Workshops ’21, September 23, 1–7. <https://doi.org/10.1145/3458744.3473366>.
 
 Shin, Sungho, François Pacaud, and Mihai Anitescu. 2024. “Accelerating Optimal Power Flow with GPUs: SIMD Abstraction of Nonlinear Programs and Condensed-Space Interior-Point Methods.” Pre-published February 26. <http://arxiv.org/abs/2307.16830>.
 

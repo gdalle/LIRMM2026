@@ -2,4 +2,4 @@
 
 ## Pages
 
-- [Speeding up operations research algorithms on parallel hardware](index.llms.md)
+- [Speeding up operations research algorithms on parallel hardware](https://gdalle.github.io/LIRMM2026/index.llms.md)

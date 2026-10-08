@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -92,10 +95,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-55617497126496852ff9f5a59253c640.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -125,7 +128,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -671,6 +674,9 @@ window.Quarto = {
 <div id="ref-applegatePracticalLargeScaleLinear2021" class="csl-entry" role="listitem">
 Applegate, David, Mateo Diaz Diaz, Oliver Hinder, et al. 2021. <span>“Practical <span>Large-Scale Linear Programming</span> Using <span>Primal-Dual Hybrid Gradient</span>.”</span> Paper presented Thirty-<span>Fifth Conference</span> on <span>Neural Information Processing Systems</span>. May 21. <a href="https://openreview.net/forum?id=_eXwwWOyqT_">https://openreview.net/forum?id=_eXwwWOyqT_</a>.
 </div>
+<div id="ref-bastRoutePlanningTransportation2016" class="csl-entry" role="listitem">
+Bast, Hannah, Daniel Delling, Andrew Goldberg, et al. 2016. <span>“Route <span>Planning</span> in <span>Transportation Networks</span>.”</span> In <em>Algorithm <span>Engineering</span>: <span>Selected Results</span> and <span>Surveys</span></em>, edited by Lasse Kliemann and Peter Sanders. Lecture <span>Notes</span> in <span>Computer Science</span>. Springer International Publishing. <a href="https://doi.org/10.1007/978-3-319-49487-6_2">https://doi.org/10.1007/978-3-319-49487-6_2</a>.
+</div>
 <div id="ref-besardEffectiveExtensibleProgramming2019" class="csl-entry" role="listitem">
 Besard, Tim, Christophe Foket, and Bjorn De Sutter. 2019. <span>“Effective <span>Extensible Programming</span>: <span>Unleashing Julia</span> on <span>GPUs</span>.”</span> <em>IEEE Transactions on Parallel and Distributed Systems</em> 30 (4): 827–41. <a href="https://doi.org/10.1109/TPDS.2018.2872064">https://doi.org/10.1109/TPDS.2018.2872064</a>.
 </div>
@@ -680,11 +686,17 @@ Blin, Nicolas, Stefano Gualandi, Christopher Maes, Andrea Lodi, and Bartolomeo S
 <div id="ref-cordukGPUAcceleratedPrimalHeuristics2025" class="csl-entry" role="listitem">
 Çördük, Akif, Piotr Sielski, Alice Boucher, and Kumar Aatish. 2025. <span>“<span>GPU-Accelerated Primal Heuristics</span> for <span>Mixed Integer Programming</span>.”</span> Pre-published October 23. <a href="https://doi.org/10.48550/arXiv.2510.20499">https://doi.org/10.48550/arXiv.2510.20499</a>.
 </div>
+<div id="ref-dellingPHASTHardwareacceleratedShortest2013" class="csl-entry" role="listitem">
+Delling, Daniel, Andrew V. Goldberg, Andreas Nowatzyk, and Renato F. Werneck. 2013. <span>“<span>PHAST</span>: <span>Hardware</span>-Accelerated Shortest Path Trees.”</span> <em>Journal of Parallel and Distributed Computing</em>, Best <span>Papers</span>: <span>International Parallel</span> and <span>Distributed Processing Symposium</span> (<span>IPDPS</span>) 2010, 2011 and 2012, vol. 73 (7): 940–52. <a href="https://doi.org/10.1016/j.jpdc.2012.02.007">https://doi.org/10.1016/j.jpdc.2012.02.007</a>.
+</div>
+<div id="ref-grandLpvizInteractiveLinear2026" class="csl-entry" role="listitem">
+Grand, Evan, and Michael Klamkin. 2026. <span>“Lpviz: <span>Interactive Linear Programming Visualization</span>.”</span> Pre-published April 30. <a href="https://doi.org/10.48550/arXiv.2604.27518">https://doi.org/10.48550/arXiv.2604.27518</a>.
+</div>
 <div id="ref-hijmaOptimizationTechniquesGPU2023" class="csl-entry" role="listitem">
 Hijma, Pieter, Stijn Heldens, Alessio Sclocco, Ben van Werkhoven, and Henri E. Bal. 2023. <span>“Optimization <span>Techniques</span> for <span>GPU Programming</span>.”</span> <em>ACM Comput. Surv.</em> 55 (11): 239:1–81. <a href="https://doi.org/10.1145/3570638">https://doi.org/10.1145/3570638</a>.
 </div>
 <div id="ref-hwuProgrammingMassivelyParallel2022" class="csl-entry" role="listitem">
-Hwu, Wen-mei W., David B. Kirk, and Izzat El Hajj. 2022. <em>Programming <span>Massively Parallel Processors</span>: <span class="nocase">A Hands-on Approach</span></em>. Morgan Kaufmann. <a href="https://books.google.com?id=7H9dEAAAQBAJ">https://books.google.com?id=7H9dEAAAQBAJ</a>.
+Hwu, Wen-mei W., David B. Kirk, and Izzat El Hajj. 2022. <em>Programming <span>Massively Parallel Processors</span>: <span>A Hands</span>-on <span>Approach</span></em>. Morgan Kaufmann. <a href="https://books.google.com?id=7H9dEAAAQBAJ">https://books.google.com?id=7H9dEAAAQBAJ</a>.
 </div>
 <div id="ref-kepnerMathematicalFoundationsGraphBLAS2016" class="csl-entry" role="listitem">
 Kepner, Jeremy, Peter Aaltonen, David Bader, et al. 2016. <span>“Mathematical Foundations of the <span>GraphBLAS</span>.”</span> <em>2016 <span>IEEE High Performance Extreme Computing Conference</span> (<span>HPEC</span>)</em>, September, 1–9. <a href="https://doi.org/10.1109/HPEC.2016.7761646">https://doi.org/10.1109/HPEC.2016.7761646</a>.
@@ -693,10 +705,13 @@ Kepner, Jeremy, Peter Aaltonen, David Bader, et al. 2016. <span>“Mathematical 
 Lu, Haihao, Zedong Peng, and Jinwen Yang. 2024. <span>“<span>MPAX</span>: <span>Mathematical Programming</span> in <span>JAX</span>.”</span> Pre-published December 12. <a href="https://doi.org/10.48550/arXiv.2412.09734">https://doi.org/10.48550/arXiv.2412.09734</a>.
 </div>
 <div id="ref-luOverviewGPUbasedFirstOrder2025" class="csl-entry" role="listitem">
-Lu, Haihao, and Jinwen Yang. 2025a. <span>“An <span>Overview</span> of <span class="nocase">GPU-based First-Order Methods</span> for <span>Linear Programming</span> and <span>Extensions</span>.”</span> Pre-published June 2. <a href="https://doi.org/10.48550/arXiv.2506.02174">https://doi.org/10.48550/arXiv.2506.02174</a>.
+Lu, Haihao, and Jinwen Yang. 2025a. <span>“An <span>Overview</span> of <span>GPU</span>-Based <span>First-Order Methods</span> for <span>Linear Programming</span> and <span>Extensions</span>.”</span> Pre-published June 2. <a href="https://doi.org/10.48550/arXiv.2506.02174">https://doi.org/10.48550/arXiv.2506.02174</a>.
 </div>
 <div id="ref-luCuPDLPjlGPUImplementation2025" class="csl-entry" role="listitem">
 Lu, Haihao, and Jinwen Yang. 2025b. <span>“<span class="nocase">cuPDLP</span>.jl: <span>A GPU Implementation</span> of <span>Restarted Primal-Dual Hybrid Gradient</span> for <span>Linear Programming</span> in <span>Julia</span>.”</span> <em>Operations Research</em> 73 (6): 3440–52. <a href="https://doi.org/10.1287/opre.2024.1069">https://doi.org/10.1287/opre.2024.1069</a>.
+</div>
+<div id="ref-mandiDecisionFocusedLearningFoundations2024" class="csl-entry" role="listitem">
+Mandi, Jayanta, James Kotary, Senne Berden, et al. 2024. <span>“Decision-<span>Focused Learning</span>: <span>Foundations</span>, <span>State</span> of the <span>Art</span>, <span>Benchmark</span> and <span>Future Opportunities</span>.”</span> <em>Journal of Artificial Intelligence Research</em> 80 (August): 1623–701. <a href="https://doi.org/10.1613/jair.1.15320">https://doi.org/10.1613/jair.1.15320</a>.
 </div>
 <div id="ref-merckxBuildingBridgesJulia2025" class="csl-entry" role="listitem">
 Merckx, Jules. 2025. <span>“Building <span>Bridges</span>: <span>Julia</span> as an <span>MLIR Frontend</span>.”</span> Pre-published February 14. <a href="https://doi.org/10.48550/arXiv.2503.04771">https://doi.org/10.48550/arXiv.2503.04771</a>.
@@ -705,7 +720,7 @@ Merckx, Jules. 2025. <span>“Building <span>Bridges</span>: <span>Julia</span> 
 Nicusan, Andrei-Leonard, Dominik Werner, Simon Branford, Simon Hartley, Andrew J. Morris, and Kit Windows-Yule. 2025. <span>“<span>AcceleratedKernels</span>.jl: <span>Cross-Architecture Parallel Algorithms</span> from a <span>Unified</span>, <span>Transpiled Codebase</span>.”</span> Pre-published July 22. <a href="https://doi.org/10.48550/arXiv.2507.16710">https://doi.org/10.48550/arXiv.2507.16710</a>.
 </div>
 <div id="ref-perumallaDesignConsiderationsGPUbased2021" class="csl-entry" role="listitem">
-Perumalla, Kalyan, and Maksudul Alam. 2021. <span>“Design <span>Considerations</span> for <span class="nocase">GPU-based Mixed Integer Programming</span> on <span>Parallel Computing Platforms</span>.”</span> (New York, NY, USA), <span>ICPP Workshops</span> ’21, September 23, 1–7. <a href="https://doi.org/10.1145/3458744.3473366">https://doi.org/10.1145/3458744.3473366</a>.
+Perumalla, Kalyan, and Maksudul Alam. 2021. <span>“Design <span>Considerations</span> for <span>GPU</span>-Based <span>Mixed Integer Programming</span> on <span>Parallel Computing Platforms</span>.”</span> (New York, NY, USA), <span>ICPP Workshops</span> ’21, September 23, 1–7. <a href="https://doi.org/10.1145/3458744.3473366">https://doi.org/10.1145/3458744.3473366</a>.
 </div>
 <div id="ref-shinAcceleratingOptimalPower2024" class="csl-entry" role="listitem">
 Shin, Sungho, François Pacaud, and Mihai Anitescu. 2024. <span>“Accelerating <span>Optimal Power Flow</span> with <span>GPUs</span>: <span>SIMD Abstraction</span> of <span>Nonlinear Programs</span> and <span>Condensed-Space Interior-Point Methods</span>.”</span> Pre-published February 26. <a href="http://arxiv.org/abs/2307.16830">http://arxiv.org/abs/2307.16830</a>.
@@ -802,7 +817,7 @@ Tjusila, Gennesaret Kharistio, Alexander Hoen, Nils-Christian Kempke, et al. 202
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/gdalle\.github\.io\/LIRMM2026\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
