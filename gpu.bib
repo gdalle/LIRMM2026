@@ -1,0 +1,213 @@
+@inproceedings{applegatePracticalLargeScaleLinear2021,
+  title = {Practical {{Large-Scale Linear Programming}} Using {{Primal-Dual Hybrid Gradient}}},
+  author = {Applegate, David and Diaz, Mateo Diaz and Hinder, Oliver and Lu, Haihao and Lubin, Miles and O'Donoghue, Brendan and Schudy, Warren},
+  date = {2021-05-21},
+  url = {https://openreview.net/forum?id=_eXwwWOyqT_},
+  abstract = {We develop a practically effective first-order method for solving linear programming problems to high accuracy.},
+  eventtitle = {Thirty-{{Fifth Conference}} on {{Neural Information Processing Systems}}},
+  langid = {english}
+}
+
+@article{besardEffectiveExtensibleProgramming2019,
+  title = {Effective {{Extensible Programming}}: {{Unleashing Julia}} on {{GPUs}}},
+  shorttitle = {Effective {{Extensible Programming}}},
+  author = {Besard, Tim and Foket, Christophe and De Sutter, Bjorn},
+  date = {2019-04},
+  journaltitle = {IEEE Transactions on Parallel and Distributed Systems},
+  volume = {30},
+  number = {4},
+  pages = {827--841},
+  issn = {1558-2183},
+  doi = {10.1109/TPDS.2018.2872064},
+  url = {https://ieeexplore.ieee.org/document/8471188},
+  abstract = {GPUs and other accelerators are popular devices for accelerating compute-intensive, parallelizable applications. However, programming these devices is a difficult task. Writing efficient device code is challenging, and is typically done in a low-level programming language. High-level languages are rarely supported, or do not integrate with the rest of the high-level language ecosystem. To overcome this, we propose compiler infrastructure to efficiently add support for new hardware or environments to an existing programming language. We evaluate our approach by adding support for NVIDIA GPUs to the Julia programming language. By integrating with the existing compiler, we significantly lower the cost to implement and maintain the new compiler, and facilitate reuse of existing application code. Moreover, use of the high-level Julia programming language enables new and dynamic approaches for GPU programming. This greatly improves programmer productivity, while maintaining application performance similar to that of the official NVIDIA CUDA toolkit.},
+  eventtitle = {{{IEEE Transactions}} on {{Parallel}} and {{Distributed Systems}}}
+}
+
+@online{blinBatchedFirstOrderMethods2026,
+  title = {Batched {{First-Order Methods}} for {{Parallel LP Solving}} in {{MIP}}},
+  author = {Blin, Nicolas and Gualandi, Stefano and Maes, Christopher and Lodi, Andrea and Stellato, Bartolomeo},
+  date = {2026},
+  doi = {10.48550/ARXIV.2601.21990},
+  url = {https://arxiv.org/abs/2601.21990},
+  abstract = {We present a batched first-order method for solving multiple linear programs in parallel on GPUs. Our approach extends the primal-dual hybrid gradient algorithm to efficiently solve batches of related linear programming problems that arise in mixed-integer programming techniques such as strong branching and bound tightening. By leveraging matrix-matrix operations instead of repeated matrix-vector operations, we obtain significant computational advantages on GPU architectures. We demonstrate the effectiveness of our approach on various case studies and identify the problem sizes where first-order methods outperform traditional simplex-based solvers depending on the computational environment one can use. This is a significant step for the design and development of integer programming algorithms tightly exploiting GPU capabilities where we argue that some specific operations should be allocated to GPUs and performed in full instead of using light-weight heuristic approaches on CPUs.},
+  pubstate = {prepublished},
+  version = {1}
+}
+
+@online{cordukGPUAcceleratedPrimalHeuristics2025,
+  title = {{{GPU-Accelerated Primal Heuristics}} for {{Mixed Integer Programming}}},
+  author = {Çördük, Akif and Sielski, Piotr and Boucher, Alice and Aatish, Kumar},
+  date = {2025-10-23},
+  eprint = {2510.20499},
+  eprinttype = {arXiv},
+  eprintclass = {math},
+  doi = {10.48550/arXiv.2510.20499},
+  url = {http://arxiv.org/abs/2510.20499},
+  abstract = {We introduce a fusion of GPU accelerated primal heuristics for Mixed Integer Programming. Leveraging GPU acceleration enables exploration of larger search regions and faster iterations. A GPU-accelerated PDLP serves as an approximate LP solver, while a new probing cache facilitates rapid roundings and early infeasibility detection. Several state-of-the-art heuristics, including Feasibility Pump, Feasibility Jump, and Fix-and-Propagate, are further accelerated and enhanced. The combined approach of these GPU-driven algorithms yields significant improvements over existing methods, both in the number of feasible solutions and the quality of objectives by achieving 221 feasible solutions and 22\% objective gap in the MIPLIB2017 benchmark on a presolved dataset.},
+  pubstate = {prepublished}
+}
+
+@article{hijmaOptimizationTechniquesGPU2023,
+  title = {Optimization {{Techniques}} for {{GPU Programming}}},
+  author = {Hijma, Pieter and Heldens, Stijn and Sclocco, Alessio and family=Werkhoven, given=Ben, prefix=van, useprefix=true and Bal, Henri E.},
+  date = {2023-03-16},
+  journaltitle = {ACM Comput. Surv.},
+  volume = {55},
+  number = {11},
+  pages = {239:1--239:81},
+  issn = {0360-0300},
+  doi = {10.1145/3570638},
+  url = {https://dl.acm.org/doi/10.1145/3570638},
+  abstract = {In the past decade, Graphics Processing Units have played an important role in the field of high-performance computing and they still advance new fields such as IoT, autonomous vehicles, and exascale computing. It is therefore important to understand how to extract performance from these processors, something that is not trivial. This survey discusses various optimization techniques found in 450 articles published in the last 14 years. We analyze the optimizations from different perspectives which shows that the various optimizations are highly interrelated, explaining the need for techniques such as auto-tuning.}
+}
+
+@book{hwuProgrammingMassivelyParallel2022,
+  title = {Programming {{Massively Parallel Processors}}: {{A Hands-on Approach}}},
+  shorttitle = {Programming {{Massively Parallel Processors}}},
+  author = {Hwu, Wen-mei W. and Kirk, David B. and Hajj, Izzat El},
+  date = {2022-05-28},
+  eprint = {7H9dEAAAQBAJ},
+  eprinttype = {googlebooks},
+  publisher = {Morgan Kaufmann},
+  abstract = {Programming Massively Parallel Processors: A Hands-on Approach shows both students and professionals alike the basic concepts of parallel programming and GPU architecture. Concise, intuitive, and practical, it is based on years of road-testing in the authors' own parallel computing courses. Various techniques for constructing and optimizing parallel programs are explored in detail, while case studies demonstrate the development process, which begins with computational thinking and ends with effective and efficient parallel programs. The new edition includes updated coverage of CUDA, including the newer libraries such as CuDNN. New chapters on frequently used parallel patterns have been added, and case studies have been updated to reflect current industry practices. - Parallel Patterns Introduces new chapters on frequently used parallel patterns (stencil, reduction, sorting) and major improvements to previous chapters (convolution, histogram, sparse matrices, graph traversal, deep learning) - Ampere Includes a new chapter focused on GPU architecture and draws examples from recent architecture generations, including Ampere - Systematic Approach Incorporates major improvements to abstract discussions of problem decomposition strategies and performance considerations, with a new optimization checklist},
+  isbn = {978-0-323-98463-8},
+  langid = {english},
+  pagetotal = {581}
+}
+
+@inproceedings{kepnerMathematicalFoundationsGraphBLAS2016,
+  title = {Mathematical Foundations of the {{GraphBLAS}}},
+  booktitle = {2016 {{IEEE High Performance Extreme Computing Conference}} ({{HPEC}})},
+  author = {Kepner, Jeremy and Aaltonen, Peter and Bader, David and Buluç, Aydin and Franchetti, Franz and Gilbert, John and Hutchison, Dylan and Kumar, Manoj and Lumsdaine, Andrew and Meyerhenke, Henning and McMillan, Scott and Yang, Carl and Owens, John D. and Zalewski, Marcin and Mattson, Timothy and Moreira, Jose},
+  date = {2016-09},
+  pages = {1--9},
+  doi = {10.1109/HPEC.2016.7761646},
+  url = {https://ieeexplore.ieee.org/abstract/document/7761646},
+  abstract = {The GraphBLAS standard (GraphBlas.org) is being developed to bring the potential of matrix-based graph algorithms to the broadest possible audience. Mathematically, the GraphBLAS defines a core set of matrix-based graph operations that can be used to implement a wide class of graph algorithms in a wide range of programming environments. This paper provides an introduction to the mathematics of the GraphBLAS. Graphs represent connections between vertices with edges. Matrices can represent a wide range of graphs using adjacency matrices or incidence matrices. Adjacency matrices are often easier to analyze while incidence matrices are often better for representing data. Fortunately, the two are easily connected by matrix multiplication. A key feature of matrix mathematics is that a very small number of matrix operations can be used to manipulate a very wide range of graphs. This composability of a small number of operations is the foundation of the GraphBLAS. A standard such as the GraphBLAS can only be effective if it has low performance overhead. Performance measurements of prototype GraphBLAS implementations indicate that the overhead is low.},
+  eventtitle = {2016 {{IEEE High Performance Extreme Computing Conference}} ({{HPEC}})}
+}
+
+@article{luCuPDLPjlGPUImplementation2025,
+  title = {{{cuPDLP}}.Jl: {{A GPU Implementation}} of {{Restarted Primal-Dual Hybrid Gradient}} for {{Linear Programming}} in {{Julia}}},
+  shorttitle = {{{cuPDLP}}.Jl},
+  author = {Lu, Haihao and Yang, Jinwen},
+  date = {2025-11},
+  journaltitle = {Operations Research},
+  volume = {73},
+  number = {6},
+  pages = {3440--3452},
+  publisher = {INFORMS},
+  issn = {0030-364X},
+  doi = {10.1287/opre.2024.1069},
+  url = {https://pubsonline.informs.org/doi/abs/10.1287/opre.2024.1069},
+  abstract = {In this paper, we provide an affirmative answer to the long-standing question: Are GPUs useful in solving linear programming? We present cuPDLP.jl, a GPU implementation of restarted primal-dual hybrid gradient for solving linear programming (LP). We show that this prototype implementation in Julia has comparable numerical performance on standard LP benchmark sets to Gurobi, a highly optimized implementation of the simplex and interior-point methods. This demonstrates the power of using GPUs in linear programming, which, for the first time, showcases that GPUs and first-order methods can lead to performance comparable to state-of-the-art commercial optimization LP solvers on standard benchmark sets. Funding: This work was partially supported by the Air Force Office of Scientific Research [Grant FA9550-24-1-0051]. Supplemental Review: The empirical results in this paper were replicated. The code, data, and files required to reproduce the results were reviewed and are available at 10.1287/opre.2024.1069.cd. Supplemental Material: This article includes an online appendix, computer code and data supporting the study’s findings, and replication files. All supplemental materials, including the code, data, and files required to reproduce the results, are available at 10.1287/opre.2024.1069.cd.}
+}
+
+@online{luMPAXMathematicalProgramming2024,
+  title = {{{MPAX}}: {{Mathematical Programming}} in {{JAX}}},
+  shorttitle = {{{MPAX}}},
+  author = {Lu, Haihao and Peng, Zedong and Yang, Jinwen},
+  date = {2024-12-12},
+  eprint = {2412.09734},
+  eprinttype = {arXiv},
+  eprintclass = {math},
+  doi = {10.48550/arXiv.2412.09734},
+  url = {http://arxiv.org/abs/2412.09734},
+  abstract = {We introduce MPAX (Mathematical Programming in JAX), a versatile and efficient toolbox for integrating mathematical programming into machine learning workflows. MPAX implemented firstorder methods in JAX, providing native support for hardware accelerations along with features like batch solving, auto-differentiation, and device parallelism. Currently in beta version, MPAX supports linear programming and will be extended to solve more general mathematical programming problems and specialized modules for common machine learning tasks. The solver is available at https://github.com/MIT-Lu-Lab/MPAX.},
+  pubstate = {prepublished}
+}
+
+@online{luOverviewGPUbasedFirstOrder2025,
+  title = {An {{Overview}} of {{GPU-based First-Order Methods}} for {{Linear Programming}} and {{Extensions}}},
+  author = {Lu, Haihao and Yang, Jinwen},
+  date = {2025-06-02},
+  eprint = {2506.02174},
+  eprinttype = {arXiv},
+  eprintclass = {math},
+  doi = {10.48550/arXiv.2506.02174},
+  url = {http://arxiv.org/abs/2506.02174},
+  abstract = {The rapid progress in GPU computing has revolutionized many fields, yet its potential in mathematical programming, such as linear programming (LP), has only recently begun to be realized. This survey aims to provide a comprehensive overview of recent advancements in GPU-based first-order methods for LP, with a particular focus on the design and development of cuPDLP. We begin by presenting the design principles and algorithmic foundation of the primal-dual hybrid gradient (PDHG) method, which forms the core of the solver. Practical enhancements, such as adaptive restarts, preconditioning, Halpern-type acceleration and infeasibility detection, are discussed in detail, along with empirical comparisons against industrial-grade solvers, highlighting the scalability and efficiency of cuPDLP. We also provide a unified theoretical framework for understanding PDHG, covering both classical and recent results on sublinear and linear convergence under sharpness conditions. Finally, we extend the discussion to GPU-based optimization beyond LP, including quadratic, semidefinite, conic, and nonlinear programming.},
+  pubstate = {prepublished}
+}
+
+@online{merckxBuildingBridgesJulia2025,
+  title = {Building {{Bridges}}: {{Julia}} as an {{MLIR Frontend}}},
+  shorttitle = {Building {{Bridges}}},
+  author = {Merckx, Jules},
+  date = {2025-02-14},
+  eprint = {2503.04771},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2503.04771},
+  url = {http://arxiv.org/abs/2503.04771},
+  abstract = {Driven by increasing compute requirements for deep learning models, compiler developers have been looking for ways to target specialised hardware and heterogeneous systems more efficiently. The MLIR project has the goal to offer infrastructure that can be used to develop new compilers and represent code at different levels of abstractions. While MLIR excels at offering developers a way to write new IR and transformations, there is no easy way for end users to generate code in these IR. In this work, we explore using the Julia programming language as a high-level input language for generating MLIR code. Most importantly, we focus on extensibility, allowing package developers to implement bindings to MLIR dialects in an intuitive and easy-to-use manner. By building on the Julia programming language, and its expressive features such as multiple dispatch and its extensible compiler, we design and implement a framework to generate MLIR code. Additionally, we evaluate this framework in three case studies. Ranging from developing a small DSL for einsum expressions, to specifying transformations on MLIR code and programming kernels to be run on GPU.},
+  pubstate = {prepublished}
+}
+
+@online{nicusanAcceleratedKernelsjlCrossArchitectureParallel2025,
+  title = {{{AcceleratedKernels}}.Jl: {{Cross-Architecture Parallel Algorithms}} from a {{Unified}}, {{Transpiled Codebase}}},
+  shorttitle = {{{AcceleratedKernels}}.Jl},
+  author = {Nicusan, Andrei-Leonard and Werner, Dominik and Branford, Simon and Hartley, Simon and Morris, Andrew J. and Windows-Yule, Kit},
+  date = {2025-07-22},
+  eprint = {2507.16710},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2507.16710},
+  url = {http://arxiv.org/abs/2507.16710},
+  abstract = {AcceleratedKernels.jl is introduced as a backendagnostic library for parallel computing in Julia, natively targeting NVIDIA, AMD, Intel, and Apple accelerators via a unique transpilation architecture. Written in a unified, compact codebase, it enables productive parallel programming with minimised implementation and usage complexities. Benchmarks of arithmetic-heavy kernels show performance on par with C and OpenMP-multithreaded CPU implementations, with Julia sometimes offering more consistent and predictable numerical performance than conventional C compilers. Exceptional composability is highlighted as simultaneous CPU-GPU co-processing is achievable - such as CPU-GPU co-sorting - with transparent use of hardware-specialised MPI implementations. Tests on the Baskerville Tier 2 UK HPC cluster achieved world-class sorting throughputs of 538-855 GB/s using 200 NVIDIA A100 GPUs, comparable to the highest literature-reported figure of 900 GB/s achieved on 262,144 CPU cores. The use of direct NVLink GPUto-GPU interconnects resulted in a 4.93x speedup on average; normalised by a combined capital, running and environmental cost, communication-heavy HPC tasks only become economically viable on GPUs if GPUDirect interconnects are employed.},
+  langid = {english},
+  pubstate = {prepublished}
+}
+
+@inproceedings{perumallaDesignConsiderationsGPUbased2021,
+  title = {Design {{Considerations}} for {{GPU-based Mixed Integer Programming}} on {{Parallel Computing Platforms}}},
+  author = {Perumalla, Kalyan and Alam, Maksudul},
+  date = {2021-09-23},
+  series = {{{ICPP Workshops}} '21},
+  pages = {1--7},
+  publisher = {Association for Computing Machinery},
+  location = {New York, NY, USA},
+  doi = {10.1145/3458744.3473366},
+  url = {https://doi.org/10.1145/3458744.3473366},
+  abstract = {Mixed Integer Programming (MIP) is a powerful abstraction in combinatorial optimization that finds real-life application across many significant sectors. The recent proliferation of graphical processing unit (GPU)-based accelerated computing architectures in large-scale parallel computing or supercomputing presents new opportunities as well as challenges in the advancement of MIP solver technology to effectively use the new accelerated computing platforms and scale to large parallel systems. Here, we recount the conventional processor-based strategies and focus on configurations where the most promising intersection lies between parallel MIP solver approaches and the specific strengths of accelerated parallel platforms. We note that the best potential lies in solving problems whose individual matrix sizes (of the linear program relaxation) fit entirely within one accelerator’s memory and whose branch-and-bound (or branch-and-cut) trees cannot be fully contained within a small number of computational nodes. Additionally, we identify ideal features of computational linear algebra support on GPU accelerators that would help advance this direction of scalable parallel solution of MIP problems on GPU-based accelerated computing architectures.},
+  isbn = {978-1-4503-8441-4}
+}
+
+@online{shinAcceleratingOptimalPower2024,
+  title = {Accelerating {{Optimal Power Flow}} with {{GPUs}}: {{SIMD Abstraction}} of {{Nonlinear Programs}} and {{Condensed-Space Interior-Point Methods}}},
+  shorttitle = {Accelerating {{Optimal Power Flow}} with {{GPUs}}},
+  author = {Shin, Sungho and Pacaud, François and Anitescu, Mihai},
+  date = {2024-02-26},
+  eprint = {2307.16830},
+  eprinttype = {arXiv},
+  eprintclass = {cs, math},
+  url = {http://arxiv.org/abs/2307.16830},
+  abstract = {This paper introduces a framework for solving alternating current optimal power flow (ACOPF) problems using graphics processing units (GPUs). While GPUs have demonstrated remarkable performance in various computing domains, their application in ACOPF has been limited due to challenges associated with porting sparse automatic differentiation (AD) and sparse linear solver routines to GPUs. We address these issues with two key strategies. First, we utilize a single-instruction, multiple-data abstraction of nonlinear programs. This approach enables the specification of model equations while preserving their parallelizable structure and, in turn, facilitates the parallel AD implementation. Second, we employ a condensed-space interior-point method (IPM) with an inequality relaxation. This technique involves condensing the Karush--Kuhn--Tucker (KKT) system into a positive definite system. This strategy offers the key advantage of being able to factorize the KKT matrix without numerical pivoting, which has hampered the parallelization of the IPM algorithm. By combining these strategies, we can perform the majority of operations on GPUs while keeping the data residing in the device memory only. Comprehensive numerical benchmark results showcase the advantage of our approach. Remarkably, our implementations -- MadNLP.jl and ExaModels.jl -- running on NVIDIA GPUs achieve an order of magnitude speedup compared with state-of-the-art tools running on contemporary CPUs.},
+  pubstate = {prepublished}
+}
+
+@online{sountsovRunningMarkovChain2024,
+  title = {Running {{Markov Chain Monte Carlo}} on {{Modern Hardware}} and {{Software}}},
+  author = {Sountsov, Pavel and Carroll, Colin and Hoffman, Matthew D.},
+  date = {2024-11-06},
+  eprint = {2411.04260},
+  eprinttype = {arXiv},
+  eprintclass = {stat},
+  doi = {10.48550/arXiv.2411.04260},
+  url = {http://arxiv.org/abs/2411.04260},
+  abstract = {Today, cheap numerical hardware offers huge amounts of parallel computing power, much of which is used for the task of fitting neural networks to data. Adoption of this hardware to accelerate statistical Markov chain Monte Carlo (MCMC) applications has been much slower. In this chapter, we suggest some patterns for speeding up MCMC workloads using the hardware (e.g., GPUs, TPUs) and software (e.g., PyTorch, JAX) that have driven progress in deep learning over the last fifteen years or so. We offer some intuitions for why these new systems are so well suited to MCMC, and show some examples (with code) where we use them to achieve dramatic speedups over a CPU-based workflow. Finally, we discuss some potential pitfalls to watch out for.},
+  pubstate = {prepublished}
+}
+
+@online{tjusilaCHAPHybridGPUCPU2026,
+  title = {{{CHAP}}: {{A Hybrid GPU-CPU Heuristic}} for {{MIP}}},
+  shorttitle = {{{CHAP}}},
+  author = {Tjusila, Gennesaret Kharistio and Hoen, Alexander and Kempke, Nils-Christian and Mexi, Gioni and Berthold, Timo and Gleixner, Ambros and Koch, Thorsten and Pokutta, Sebastian},
+  date = {2026},
+  doi = {10.48550/ARXIV.2605.05086},
+  url = {https://arxiv.org/abs/2605.05086},
+  abstract = {We present CHAP (Coordinating Heuristics Across Platforms) a GPU-CPU-hybrid primal heuristic framework for mixed-integer programming. CHAP adopts a portfolio approach where it coordinates a set of primal heuristics, including Local Search, Fix-and-Propagate, and Feasibility Pump, via a shared solution pool. The solution pool is used to exchange feasible incumbent solutions, LP solutions, along with promising infeasible solution candidates, enabling a more comprehensive exploration of the solution space. On the GPU side, we implement a native tabu search featuring a novel best-shift algorithm built on sort, scan, and reduce primitives, along with specialized kernel designs. We additionally leverage cuPDLPx as an approximate LP solver. On the CPU side, we employ various Fix-and-Propagate strategies, guided by information from the solution pool, complemented by a CPU-based tabu search and a Feasibility Pump. All components operate collaboratively, iteratively repairing and improving candidate solutions maintained in the pool. We evaluate our framework on the 50-instances benchmark from the 2026 Land-Doig MIP Competition under competition constraints, including a five-minute time limit. In these settings, CHAP finds solutions to 47 instances outperforming both Gurobi (44) in default mode and NVIDIA cuOpt (43) in heuristics-only mode. The results demonstrate that coordinated cross-platform portfolios offer a promising direction for the integration of GPU heuristics into modern high-performance MIP solvers. The code will be made available on GitHub.},
+  pubstate = {prepublished},
+  version = {1}
+}

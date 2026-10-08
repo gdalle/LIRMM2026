@@ -1,0 +1,19 @@
+project:
+  type: website
+
+website:
+  title: "Home"
+  llms-txt: true
+  page-footer: "Copyright 2026, Guillaume Dalle" 
+  repo-url: https://github.com/gdalle/LIRMMM2026
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+
+
+
