@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Speeding up operations research algorithms on parallel hardware – Home</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#why-gpus" id="toc-why-gpus" class="nav-link" data-scroll-target="#why-gpus">Why GPUs?</a></li>
+  <li><a href="#cpu-versus-gpu" id="toc-cpu-versus-gpu" class="nav-link" data-scroll-target="#cpu-versus-gpu">CPU versus GPU</a></li>
+  <li><a href="#challenges-of-parallelization" id="toc-challenges-of-parallelization" class="nav-link" data-scroll-target="#challenges-of-parallelization">Challenges of parallelization</a></li>
+  </ul></li>
+  <li><a href="#how-a-gpu-works" id="toc-how-a-gpu-works" class="nav-link" data-scroll-target="#how-a-gpu-works">How a GPU works</a>
+  <ul class="collapse">
+  <li><a href="#communication" id="toc-communication" class="nav-link" data-scroll-target="#communication">Communication</a></li>
+  <li><a href="#theoretical-structure" id="toc-theoretical-structure" class="nav-link" data-scroll-target="#theoretical-structure">Theoretical structure</a></li>
+  <li><a href="#hardware-structure" id="toc-hardware-structure" class="nav-link" data-scroll-target="#hardware-structure">Hardware structure</a></li>
+  <li><a href="#warps-and-divergence" id="toc-warps-and-divergence" class="nav-link" data-scroll-target="#warps-and-divergence">Warps and divergence</a></li>
+  <li><a href="#example-kernel" id="toc-example-kernel" class="nav-link" data-scroll-target="#example-kernel">Example kernel</a></li>
+  <li><a href="#matmul-kernel" id="toc-matmul-kernel" class="nav-link" data-scroll-target="#matmul-kernel">Matmul kernel</a></li>
+  </ul></li>
+  <li><a href="#performance-considerations" id="toc-performance-considerations" class="nav-link" data-scroll-target="#performance-considerations">Performance considerations</a>
+  <ul class="collapse">
+  <li><a href="#roofline-model" id="toc-roofline-model" class="nav-link" data-scroll-target="#roofline-model">Roofline model</a></li>
+  <li><a href="#memory-hierarchy" id="toc-memory-hierarchy" class="nav-link" data-scroll-target="#memory-hierarchy">Memory hierarchy</a></li>
+  <li><a href="#fighting-memory-limits" id="toc-fighting-memory-limits" class="nav-link" data-scroll-target="#fighting-memory-limits">Fighting memory limits</a></li>
+  <li><a href="#resource-allocation" id="toc-resource-allocation" class="nav-link" data-scroll-target="#resource-allocation">Resource allocation</a></li>
+  <li><a href="#launching-kernels" id="toc-launching-kernels" class="nav-link" data-scroll-target="#launching-kernels">Launching kernels</a></li>
+  </ul></li>
+  <li><a href="#sparse-matrices-and-graphs" id="toc-sparse-matrices-and-graphs" class="nav-link" data-scroll-target="#sparse-matrices-and-graphs">Sparse matrices and graphs</a>
+  <ul class="collapse">
+  <li><a href="#sparse-matrix-formats" id="toc-sparse-matrix-formats" class="nav-link" data-scroll-target="#sparse-matrix-formats">Sparse matrix formats</a></li>
+  <li><a href="#spmv-kernels" id="toc-spmv-kernels" class="nav-link" data-scroll-target="#spmv-kernels">SpMV kernels</a></li>
+  <li><a href="#are-fancy-sparse-formats-worth-it" id="toc-are-fancy-sparse-formats-worth-it" class="nav-link" data-scroll-target="#are-fancy-sparse-formats-worth-it">Are fancy sparse formats worth it?</a></li>
+  <li><a href="#graph-algorithms-with-linear-algebra" id="toc-graph-algorithms-with-linear-algebra" class="nav-link" data-scroll-target="#graph-algorithms-with-linear-algebra">Graph algorithms with linear algebra</a></li>
+  </ul></li>
+  <li><a href="#shortest-paths-and-preprocessing" id="toc-shortest-paths-and-preprocessing" class="nav-link" data-scroll-target="#shortest-paths-and-preprocessing">Shortest paths and preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#forget-about-dijkstra" id="toc-forget-about-dijkstra" class="nav-link" data-scroll-target="#forget-about-dijkstra">Forget about Dijkstra</a></li>
+  <li><a href="#other-applications-of-preprocessing" id="toc-other-applications-of-preprocessing" class="nav-link" data-scroll-target="#other-applications-of-preprocessing">Other applications of preprocessing</a></li>
+  <li><a href="#contraction-hierarchies" id="toc-contraction-hierarchies" class="nav-link" data-scroll-target="#contraction-hierarchies">Contraction hierarchies</a></li>
+  <li><a href="#running-it-on-the-gpu-phast" id="toc-running-it-on-the-gpu-phast" class="nav-link" data-scroll-target="#running-it-on-the-gpu-phast">Running it on the GPU (PHAST)</a></li>
+  </ul></li>
+  <li><a href="#linear-and-integer-programming" id="toc-linear-and-integer-programming" class="nav-link" data-scroll-target="#linear-and-integer-programming">Linear and integer programming</a>
+  <ul class="collapse">
+  <li><a href="#algorithms-for-lp" id="toc-algorithms-for-lp" class="nav-link" data-scroll-target="#algorithms-for-lp">Algorithms for LP</a></li>
+  <li><a href="#whats-wrong-with-linear-solves" id="toc-whats-wrong-with-linear-solves" class="nav-link" data-scroll-target="#whats-wrong-with-linear-solves">What’s wrong with linear solves</a></li>
+  <li><a href="#pdlp" id="toc-pdlp" class="nav-link" data-scroll-target="#pdlp">PDLP</a></li>
+  <li><a href="#what-makes-it-go-brrrr" id="toc-what-makes-it-go-brrrr" class="nav-link" data-scroll-target="#what-makes-it-go-brrrr">What makes it go brrrr</a></li>
+  <li><a href="#areas-of-improvement" id="toc-areas-of-improvement" class="nav-link" data-scroll-target="#areas-of-improvement">Areas of improvement</a></li>
+  <li><a href="#algorithms-for-milp" id="toc-algorithms-for-milp" class="nav-link" data-scroll-target="#algorithms-for-milp">Algorithms for MILP</a></li>
+  <li><a href="#gpu-friendly-milp-heuristics" id="toc-gpu-friendly-milp-heuristics" class="nav-link" data-scroll-target="#gpu-friendly-milp-heuristics">GPU-friendly MILP heuristics</a></li>
+  </ul></li>
+  <li><a href="#julia-tooling" id="toc-julia-tooling" class="nav-link" data-scroll-target="#julia-tooling">Julia tooling</a>
+  <ul class="collapse">
+  <li><a href="#cuda-specific-code" id="toc-cuda-specific-code" class="nav-link" data-scroll-target="#cuda-specific-code">CUDA-specific code</a></li>
+  <li><a href="#hardware-agnostic-code" id="toc-hardware-agnostic-code" class="nav-link" data-scroll-target="#hardware-agnostic-code">Hardware-agnostic code</a></li>
+  <li><a href="#deep-learning" id="toc-deep-learning" class="nav-link" data-scroll-target="#deep-learning">Deep learning</a></li>
+  <li><a href="#mathematical-programming" id="toc-mathematical-programming" class="nav-link" data-scroll-target="#mathematical-programming">Mathematical programming</a></li>
+  <li><a href="#graph-algorithms" id="toc-graph-algorithms" class="nav-link" data-scroll-target="#graph-algorithms">Graph algorithms</a></li>
+  </ul></li>
+  <li><a href="#python-tooling" id="toc-python-tooling" class="nav-link" data-scroll-target="#python-tooling">Python tooling</a>
+  <ul class="collapse">
+  <li><a href="#cuda-specific-code-1" id="toc-cuda-specific-code-1" class="nav-link" data-scroll-target="#cuda-specific-code-1">CUDA-specific code</a></li>
+  <li><a href="#hardware-agnostic-code-1" id="toc-hardware-agnostic-code-1" class="nav-link" data-scroll-target="#hardware-agnostic-code-1">Hardware-agnostic code</a></li>
+  <li><a href="#deep-learning-1" id="toc-deep-learning-1" class="nav-link" data-scroll-target="#deep-learning-1">Deep learning</a></li>
+  <li><a href="#mathematical-programming-1" id="toc-mathematical-programming-1" class="nav-link" data-scroll-target="#mathematical-programming-1">Mathematical programming</a></li>
+  <li><a href="#graph-algorithms-1" id="toc-graph-algorithms-1" class="nav-link" data-scroll-target="#graph-algorithms-1">Graph algorithms</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Speeding up operations research algorithms on parallel hardware</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="why-gpus" class="level3">
+<h3 class="anchored" data-anchor-id="why-gpus">Why GPUs?</h3>
+<ul>
+<li>Single cores are no longer getting much faster, computing power increases from parallelism</li>
+<li>Initially designed for computer graphics, processing pixels in parallel</li>
+<li>CUDA (2007) made the switch to a general programming interface</li>
+<li>Alexnet (2012) showed they can be used in deep learning</li>
+<li>Most supercomputing capabilities are now GPU-driven, but they are in every laptop too</li>
+</ul>
+</section>
+<section id="cpu-versus-gpu" class="level3">
+<h3 class="anchored" data-anchor-id="cpu-versus-gpu">CPU versus GPU</h3>
+<ul>
+<li>CPU: few cores optimized for sequential, complex operations, low latency, large memory</li>
+<li>GPU: many cores optimized for parallel, simple operations, high throughput, small memory</li>
+<li>GPUs perform many floating point operations per second (100 TFLOPS on Float32, 100x that of CPUs)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>GPUs have high memory bandwidth (1000 GB/s, 10x that of CPUs)</li>
+</ul>
+</section>
+<section id="challenges-of-parallelization" class="level3">
+<h3 class="anchored" data-anchor-id="challenges-of-parallelization">Challenges of parallelization</h3>
+<ul>
+<li>Additional complexity: performing more work</li>
+<li>Memory-bound applications</li>
+<li>Heterogeneous, unpredictable input data</li>
+<li>Synchronization operations</li>
+</ul>
+</section>
+</section>
+<section id="how-a-gpu-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-a-gpu-works">How a GPU works</h2>
+<section id="communication" class="level3">
+<h3 class="anchored" data-anchor-id="communication">Communication</h3>
+<ul>
+<li>CPU is the host, GPUs are the devices</li>
+<li>Device code is composed of kernels, executed in a data-parallel manner</li>
+<li>Kernels are interlaced with host instructions, launched asynchronously</li>
+<li>Transfer of data or instructions between CPU and GPU is expensive</li>
+</ul>
+</section>
+<section id="theoretical-structure" class="level3">
+<h3 class="anchored" data-anchor-id="theoretical-structure">Theoretical structure</h3>
+<ul>
+<li>Grid of blocks (1D, 2D or 3D), each with up to 1024 threads</li>
+<li>Within a block, threads are executed in lockstep</li>
+<li>Single Instruction, Multiple Thread paradigm</li>
+</ul>
+</section>
+<section id="hardware-structure" class="level3">
+<h3 class="anchored" data-anchor-id="hardware-structure">Hardware structure</h3>
+<ul>
+<li>Several Streaming Multiprocessors (142 on the L40s), each with many CUDA cores (128 on the L40s)</li>
+<li>All threads in a block are assigned to the same SM, but one SM will get several blocks</li>
+<li>Threads within a block are physically in the same place and can interact with one another (synchronization, memory)</li>
+<li>Limited number of SMs + limited number of blocks executed at the same time by an SM = no guarantee on the simultaneity or sequence between two blocks</li>
+</ul>
+</section>
+<section id="warps-and-divergence" class="level3">
+<h3 class="anchored" data-anchor-id="warps-and-divergence">Warps and divergence</h3>
+<ul>
+<li>Blocks are split into warps of 32 threads which are physically executed in lockstep</li>
+<li>In the presence of control flow, all paths are taken sequentially: one pass for <code>if</code> then one pass for <code>else</code></li>
+<li>Typical example is boundary conditions (only affects one warp)</li>
+</ul>
+</section>
+<section id="example-kernel" class="level3">
+<h3 class="anchored" data-anchor-id="example-kernel">Example kernel</h3>
+<ul>
+<li>Each thread knows its block and thread ID, which replaces a loop</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">KernelAbstractions</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@kernel</span> <span class="kw">function</span> <span class="fu">mul2_kernel</span>(A)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  I <span class="op">=</span> <span class="pp">@index</span>(Global)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  A[I] <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> A[I]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Grid and block shapes are specified by host at kernel launch</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">CUDA</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dev <span class="op">=</span> <span class="fu">CUDABackend</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">1024</span>, <span class="fl">1024</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ev <span class="op">=</span> <span class="fu">mul2_kernel</span>(dev, <span class="fl">64</span>)(A, ndrange<span class="op">=</span><span class="fu">size</span>(A))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">synchronize</span>(dev)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(A <span class="op">.==</span> <span class="fl">2.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="matmul-kernel" class="level3">
+<h3 class="anchored" data-anchor-id="matmul-kernel">Matmul kernel</h3>
+<p>Grid maps to output matrix, one thread per dot product:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">KernelAbstractions</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">@kernel</span> <span class="kw">function</span> <span class="fu">matmul_kernel!</span>(output, a, b)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    i, j <span class="op">=</span> <span class="pp">@index</span>(Global, <span class="dt">NTuple</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    tmp_sum <span class="op">=</span> <span class="fu">zero</span>(<span class="fu">eltype</span>(output))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="fu">axes</span>(a, <span class="fl">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        tmp_sum <span class="op">+=</span> a[i, k] <span class="op">*</span> b[k, j]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    output[i, j] <span class="op">=</span> tmp_sum</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">matmul!</span>(output, a, b)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    backend <span class="op">=</span> <span class="fu">get_backend</span>(a)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    kernel! <span class="op">=</span> <span class="fu">matmul_kernel!</span>(backend)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kernel!</span>(output, a, b, ndrange <span class="op">=</span> <span class="fu">size</span>(output))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="performance-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="performance-considerations">Performance considerations</h2>
+<section id="roofline-model" class="level3">
+<h3 class="anchored" data-anchor-id="roofline-model">Roofline model</h3>
+<ul>
+<li>Key quantity: compute to global memory access ratio (or computational intensity), expressed in FLOP/B</li>
+<li>Example: matrix multiplication</li>
+<li>Roofline diagram: computational intensity (FLOP/B) as X axis, computational throughput (GFLOP/s) as Y axis</li>
+<li>Two regimes: memory-bound (<span class="math inline">\(\alpha\)</span> = peak bandwidth in B/s times computational throughput) then compute-bound (<span class="math inline">\(\beta\)</span> = peak throughput in GB/s)</li>
+</ul>
+</section>
+<section id="memory-hierarchy" class="level3">
+<h3 class="anchored" data-anchor-id="memory-hierarchy">Memory hierarchy</h3>
+<ul>
+<li>Host memory + several kinds of on-device memory</li>
+<li>Global memory (or DRAM), per grid
+<ul>
+<li>Constant memory, part of global but read-only</li>
+<li>Local memory, part of global but owned by thread</li>
+</ul></li>
+<li>Shared (or scratchpad) memory, per block</li>
+<li>Registers, per thread</li>
+</ul>
+</section>
+<section id="fighting-memory-limits" class="level3">
+<h3 class="anchored" data-anchor-id="fighting-memory-limits">Fighting memory limits</h3>
+<ul>
+<li>Improve data reuse to reach peak FLOPS</li>
+<li>Use shared memory as scratchpad to store data from global memory</li>
+<li>Coalesce global memory accesses (make sure adjacent threads access adjacent memory locations)</li>
+<li>Example: tiling for matmul</li>
+<li>Warps are ordered linearly (column-major vs row-major, depending on the language)</li>
+</ul>
+</section>
+<section id="resource-allocation" class="level3">
+<h3 class="anchored" data-anchor-id="resource-allocation">Resource allocation</h3>
+<ul>
+<li>Hardware-dependent resource allocation enables transparent scalability</li>
+<li>(Too) many threads/warps per SM is good for latency tolerance</li>
+<li>But each thread induces a certain occupancy (amount of memory, registers, etc)</li>
+</ul>
+</section>
+<section id="launching-kernels" class="level3">
+<h3 class="anchored" data-anchor-id="launching-kernels">Launching kernels</h3>
+<ul>
+<li>Kernel launch has overhead</li>
+<li>Kernel fusion at program scale improves performance</li>
+</ul>
+</section>
+</section>
+<section id="sparse-matrices-and-graphs" class="level2">
+<h2 class="anchored" data-anchor-id="sparse-matrices-and-graphs">Sparse matrices and graphs</h2>
+<section id="sparse-matrix-formats" class="level3">
+<h3 class="anchored" data-anchor-id="sparse-matrix-formats">Sparse matrix formats</h3>
+<ul>
+<li>COO (coordinate-wise)</li>
+<li>CSR (row-wise)</li>
+<li>ELL (CSR + data padding + transposition)</li>
+<li>SELL (ELL by chunk)</li>
+<li>JDS (CSR + sort by row length)</li>
+<li>Hybrids</li>
+<li>Tradeoffs:
+<ul>
+<li>space efficiency</li>
+<li>accessibility (coefficient, row, column)</li>
+<li>flexibility (modifying, appending)</li>
+</ul></li>
+</ul>
+</section>
+<section id="spmv-kernels" class="level3">
+<h3 class="anchored" data-anchor-id="spmv-kernels">SpMV kernels</h3>
+<ul>
+<li>COO (one thread per input coefficient): atomic operations</li>
+<li>CSR (one thread per input row): load balancing, divergence and coalescing issues</li>
+<li>ELL (one thread per input row): low space efficiency, divergence issues</li>
+</ul>
+</section>
+<section id="are-fancy-sparse-formats-worth-it" class="level3">
+<h3 class="anchored" data-anchor-id="are-fancy-sparse-formats-worth-it">Are fancy sparse formats worth it?</h3>
+<ul>
+<li>For one-off computations, no</li>
+<li>For repeated computations, yes</li>
+<li>Either way, SpMV much less efficient than dense equivalent: no data reuse</li>
+</ul>
+</section>
+<section id="graph-algorithms-with-linear-algebra" class="level3">
+<h3 class="anchored" data-anchor-id="graph-algorithms-with-linear-algebra">Graph algorithms with linear algebra</h3>
+<ul>
+<li>GraphBLAS specification</li>
+<li>Custom semirings</li>
+<li>Example: BFS</li>
+</ul>
+</section>
+</section>
+<section id="shortest-paths-and-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="shortest-paths-and-preprocessing">Shortest paths and preprocessing</h2>
+<section id="forget-about-dijkstra" class="level3">
+<h3 class="anchored" data-anchor-id="forget-about-dijkstra">Forget about Dijkstra</h3>
+<ul>
+<li>Real graphs are huge but don’t move</li>
+<li>Preprocessing the graph can lead to huge speedups (6 orders of magnitude)</li>
+<li>Done in practice for continental-size applications like Google Maps</li>
+<li>Needs adaptation if the weights change</li>
+</ul>
+</section>
+<section id="other-applications-of-preprocessing" class="level3">
+<h3 class="anchored" data-anchor-id="other-applications-of-preprocessing">Other applications of preprocessing</h3>
+<ul>
+<li>Decomposition methods (multicommodity flow)</li>
+<li>Fixed point algorithms (traffic assignment)</li>
+<li>Decision-focused learning</li>
+</ul>
+</section>
+<section id="contraction-hierarchies" class="level3">
+<h3 class="anchored" data-anchor-id="contraction-hierarchies">Contraction hierarchies</h3>
+<ul>
+<li>Iteratively contract nodes according to a priority order</li>
+<li>Add shortcuts to preserve shortest path distances while reducing diameter</li>
+<li>At query time, search in shallow acyclic graphs</li>
+<li>Better ordering means longer preprocessing but less fill-in</li>
+</ul>
+</section>
+<section id="running-it-on-the-gpu-phast" class="level3">
+<h3 class="anchored" data-anchor-id="running-it-on-the-gpu-phast">Running it on the GPU (PHAST)</h3>
+<ul>
+<li>Get rid of expensive data structures (priority queues)</li>
+<li>Improve memory locality by reordering vertices</li>
+<li>In the topological order, process levels in parallel</li>
+<li>Process several shortest path trees in parallel</li>
+</ul>
+</section>
+</section>
+<section id="linear-and-integer-programming" class="level2">
+<h2 class="anchored" data-anchor-id="linear-and-integer-programming">Linear and integer programming</h2>
+<section id="algorithms-for-lp" class="level3">
+<h3 class="anchored" data-anchor-id="algorithms-for-lp">Algorithms for LP</h3>
+<ul>
+<li>Simplex: variable-wise updates, linear solve</li>
+<li>Interior point: linear solve</li>
+<li>Primal-dual methods: no linear solve</li>
+<li>Visualization on <a href="https://lpviz.net/" class="uri">https://lpviz.net/</a></li>
+</ul>
+</section>
+<section id="whats-wrong-with-linear-solves" class="level3">
+<h3 class="anchored" data-anchor-id="whats-wrong-with-linear-solves">What’s wrong with linear solves</h3>
+<ul>
+<li>Memory overhead of the factorization</li>
+<li>Sparse factorization and updates</li>
+<li>Doesn’t scale well on GPU</li>
+<li>Not necessarily the bottleneck</li>
+</ul>
+</section>
+<section id="pdlp" class="level3">
+<h3 class="anchored" data-anchor-id="pdlp">PDLP</h3>
+<ul>
+<li>First-order algorithm with primal and dual variables</li>
+<li>Just matrix-vector multiplications (SpMV)</li>
+<li>Low precision, high scalability</li>
+<li>Original CPU and GPU implementations in Julia (Google, then MIT)</li>
+</ul>
+</section>
+<section id="what-makes-it-go-brrrr" class="level3">
+<h3 class="anchored" data-anchor-id="what-makes-it-go-brrrr">What makes it go brrrr</h3>
+<ul>
+<li>Preconditioning</li>
+<li>Restarting</li>
+<li>Adaptive step size</li>
+<li>Averaging / reflection</li>
+<li>Feasibility polishing</li>
+</ul>
+</section>
+<section id="areas-of-improvement" class="level3">
+<h3 class="anchored" data-anchor-id="areas-of-improvement">Areas of improvement</h3>
+<ul>
+<li>Presolve</li>
+<li>Crossover</li>
+<li>Hyperparameter tuning</li>
+</ul>
+</section>
+<section id="algorithms-for-milp" class="level3">
+<h3 class="anchored" data-anchor-id="algorithms-for-milp">Algorithms for MILP</h3>
+<ul>
+<li>Branch &amp; bound: very sequential</li>
+<li>Cutting planes: very sequential</li>
+<li>Primal heuristics: sometimes parallelizable</li>
+</ul>
+</section>
+<section id="gpu-friendly-milp-heuristics" class="level3">
+<h3 class="anchored" data-anchor-id="gpu-friendly-milp-heuristics">GPU-friendly MILP heuristics</h3>
+<ul>
+<li>PDLP as the relaxation solver</li>
+<li>Feasibility pump</li>
+<li>Fix-and-propagate</li>
+<li>Large neighborhood search</li>
+<li>Collaboration between CPU and GPU</li>
+</ul>
+</section>
+</section>
+<section id="julia-tooling" class="level2">
+<h2 class="anchored" data-anchor-id="julia-tooling">Julia tooling</h2>
+<section id="cuda-specific-code" class="level3">
+<h3 class="anchored" data-anchor-id="cuda-specific-code">CUDA-specific code</h3>
+<ul>
+<li><a href="https://github.com/JuliaGPU/CUDA.jl">CUDA.jl</a></li>
+<li>Math libraries: cuBLAS.jl, cuSPARSE.jl, etc.</li>
+<li><a href="https://github.com/JuliaGPU/cuTile.jl">cuTile.jl</a></li>
+</ul>
+</section>
+<section id="hardware-agnostic-code" class="level3">
+<h3 class="anchored" data-anchor-id="hardware-agnostic-code">Hardware-agnostic code</h3>
+<ul>
+<li><a href="https://github.com/JuliaGPU/GPUArrays.jl">GPUArrays.jl</a></li>
+<li><a href="https://github.com/JuliaGPU/KernelAbstractions.jl">KernelAbstractions.jl</a></li>
+<li><a href="https://github.com/JuliaGPU/AcceleratedKernels.jl">AcceleratedKernels.jl</a></li>
+<li><a href="https://github.com/EnzymeAD/Reactant.jl">Reactant.jl</a></li>
+</ul>
+</section>
+<section id="deep-learning" class="level3">
+<h3 class="anchored" data-anchor-id="deep-learning">Deep learning</h3>
+<ul>
+<li><a href="https://github.com/EnzymeAd/Enzyme.jl">Enzyme.jl</a></li>
+<li><a href="https://github.com/LuxDL/Lux.jl">Lux.jl</a></li>
+</ul>
+</section>
+<section id="mathematical-programming" class="level3">
+<h3 class="anchored" data-anchor-id="mathematical-programming">Mathematical programming</h3>
+<p>Modeling (including batched):</p>
+<ul>
+<li><a href="https://github.com/jump-dev/JuMP.jl">JuMP.jl</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li><a href="https://github.com/jump-dev/Convex.jl">Convex.jl</a></li>
+<li><a href="https://github.com/exanauts/ExaModels.jl">ExaModels.jl</a></li>
+<li><a href="https://github.com/LearningToOptimize/BatchNLPKernels.jl">BatchNLPKernels.jl</a></li>
+<li>Experimental: <a href="https://github.com/klamike/BatchOptInterface.jl">BatchOptInterface.jl</a>, <a href="https://github.com/klamike/BatchQuadraticModels.jl">BatchQuadraticModels.jl</a></li>
+</ul>
+<p>Solvers:</p>
+<ul>
+<li><a href="https://github.com/oxfordcontrol/Clarabel.jl/tree/CuClarabel">Clarabel.jl</a></li>
+<li><a href="https://github.com/JuliaDecisionFocusedLearning/CoolPDLP.jl">CoolPDLP.jl</a></li>
+<li><a href="https://github.com/jump-dev/cuOpt.jl">cuOpt.jl</a></li>
+<li><a href="https://github.com/MIT-Lu-Lab/CuPDLPx.jl">cuPDLPx.jl</a></li>
+<li><a href="https://github.com/MadNLP/MadIPM.jl">MadIPM.jl</a></li>
+<li><a href="https://github.com/MadNLP/MadNLP.jl">MadNLP.jl</a></li>
+<li><a href="https://github.com/jump-dev/SCS.jl">SCS.jl</a></li>
+</ul>
+</section>
+<section id="graph-algorithms" class="level3">
+<h3 class="anchored" data-anchor-id="graph-algorithms">Graph algorithms</h3>
+<p>Nothing… yet</p>
+</section>
+</section>
+<section id="python-tooling" class="level2">
+<h2 class="anchored" data-anchor-id="python-tooling">Python tooling</h2>
+<section id="cuda-specific-code-1" class="level3">
+<h3 class="anchored" data-anchor-id="cuda-specific-code-1">CUDA-specific code</h3>
+<ul>
+<li><a href="https://github.com/cupy/cupy">cupy</a></li>
+<li><a href="https://github.com/NVIDIA/nvmath-python">nvmath-python</a></li>
+<li><a href="https://github.com/nvidia/cutile-python">cutile-python</a></li>
+</ul>
+</section>
+<section id="hardware-agnostic-code-1" class="level3">
+<h3 class="anchored" data-anchor-id="hardware-agnostic-code-1">Hardware-agnostic code</h3>
+<ul>
+<li><a href="https://github.com/data-apis/array-api/">Array API</a></li>
+<li><a href="https://github.com/dmlc/dlpack">DLPack</a></li>
+<li><a href="https://github.com/numba/numba">numba</a></li>
+<li><a href="https://github.com/triton-lang/triton">triton</a></li>
+<li><a href="https://docs.jax.dev/en/latest/pallas/index.html">Pallas</a></li>
+</ul>
+</section>
+<section id="deep-learning-1" class="level3">
+<h3 class="anchored" data-anchor-id="deep-learning-1">Deep learning</h3>
+<ul>
+<li><a href="https://github.com/pytorch/pytorch">PyTorch</a></li>
+<li><a href="https://github.com/jax-ml/jax">JAX</a></li>
+</ul>
+</section>
+<section id="mathematical-programming-1" class="level3">
+<h3 class="anchored" data-anchor-id="mathematical-programming-1">Mathematical programming</h3>
+<p>Modeling:</p>
+<ul>
+<li><a href="https://github.com/cvxpy/cvxpy/">cvxpy</a></li>
+<li><a href="https://github.com/pyomo/pyomo">pyomo</a></li>
+</ul>
+<p>Solvers:</p>
+<ul>
+<li><a href="https://github.com/NVIDIA/cuopt">cuopt</a></li>
+<li><a href="https://github.com/MIT-Lu-Lab/MPAX">MPAX</a></li>
+</ul>
+</section>
+<section id="graph-algorithms-1" class="level3">
+<h3 class="anchored" data-anchor-id="graph-algorithms-1">Graph algorithms</h3>
+<ul>
+<li><a href="https://github.com/networkx/networkx">networkx</a></li>
+<li><a href="https://github.com/rapidsai/cugraph">cugraph</a></li>
+</ul>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-applegatePracticalLargeScaleLinear2021" class="csl-entry" role="listitem">
+Applegate, David, Mateo Diaz Diaz, Oliver Hinder, et al. 2021. <span>“Practical <span>Large-Scale Linear Programming</span> Using <span>Primal-Dual Hybrid Gradient</span>.”</span> Paper presented Thirty-<span>Fifth Conference</span> on <span>Neural Information Processing Systems</span>. May 21. <a href="https://openreview.net/forum?id=_eXwwWOyqT_">https://openreview.net/forum?id=_eXwwWOyqT_</a>.
+</div>
+<div id="ref-besardEffectiveExtensibleProgramming2019" class="csl-entry" role="listitem">
+Besard, Tim, Christophe Foket, and Bjorn De Sutter. 2019. <span>“Effective <span>Extensible Programming</span>: <span>Unleashing Julia</span> on <span>GPUs</span>.”</span> <em>IEEE Transactions on Parallel and Distributed Systems</em> 30 (4): 827–41. <a href="https://doi.org/10.1109/TPDS.2018.2872064">https://doi.org/10.1109/TPDS.2018.2872064</a>.
+</div>
+<div id="ref-blinBatchedFirstOrderMethods2026" class="csl-entry" role="listitem">
+Blin, Nicolas, Stefano Gualandi, Christopher Maes, Andrea Lodi, and Bartolomeo Stellato. 2026. <span>“Batched <span>First-Order Methods</span> for <span>Parallel LP Solving</span> in <span>MIP</span>.”</span> Version 1. Pre-published. <a href="https://doi.org/10.48550/ARXIV.2601.21990">https://doi.org/10.48550/ARXIV.2601.21990</a>.
+</div>
+<div id="ref-cordukGPUAcceleratedPrimalHeuristics2025" class="csl-entry" role="listitem">
+Çördük, Akif, Piotr Sielski, Alice Boucher, and Kumar Aatish. 2025. <span>“<span>GPU-Accelerated Primal Heuristics</span> for <span>Mixed Integer Programming</span>.”</span> Pre-published October 23. <a href="https://doi.org/10.48550/arXiv.2510.20499">https://doi.org/10.48550/arXiv.2510.20499</a>.
+</div>
+<div id="ref-hijmaOptimizationTechniquesGPU2023" class="csl-entry" role="listitem">
+Hijma, Pieter, Stijn Heldens, Alessio Sclocco, Ben van Werkhoven, and Henri E. Bal. 2023. <span>“Optimization <span>Techniques</span> for <span>GPU Programming</span>.”</span> <em>ACM Comput. Surv.</em> 55 (11): 239:1–81. <a href="https://doi.org/10.1145/3570638">https://doi.org/10.1145/3570638</a>.
+</div>
+<div id="ref-hwuProgrammingMassivelyParallel2022" class="csl-entry" role="listitem">
+Hwu, Wen-mei W., David B. Kirk, and Izzat El Hajj. 2022. <em>Programming <span>Massively Parallel Processors</span>: <span class="nocase">A Hands-on Approach</span></em>. Morgan Kaufmann. <a href="https://books.google.com?id=7H9dEAAAQBAJ">https://books.google.com?id=7H9dEAAAQBAJ</a>.
+</div>
+<div id="ref-kepnerMathematicalFoundationsGraphBLAS2016" class="csl-entry" role="listitem">
+Kepner, Jeremy, Peter Aaltonen, David Bader, et al. 2016. <span>“Mathematical Foundations of the <span>GraphBLAS</span>.”</span> <em>2016 <span>IEEE High Performance Extreme Computing Conference</span> (<span>HPEC</span>)</em>, September, 1–9. <a href="https://doi.org/10.1109/HPEC.2016.7761646">https://doi.org/10.1109/HPEC.2016.7761646</a>.
+</div>
+<div id="ref-luMPAXMathematicalProgramming2024" class="csl-entry" role="listitem">
+Lu, Haihao, Zedong Peng, and Jinwen Yang. 2024. <span>“<span>MPAX</span>: <span>Mathematical Programming</span> in <span>JAX</span>.”</span> Pre-published December 12. <a href="https://doi.org/10.48550/arXiv.2412.09734">https://doi.org/10.48550/arXiv.2412.09734</a>.
+</div>
+<div id="ref-luOverviewGPUbasedFirstOrder2025" class="csl-entry" role="listitem">
+Lu, Haihao, and Jinwen Yang. 2025a. <span>“An <span>Overview</span> of <span class="nocase">GPU-based First-Order Methods</span> for <span>Linear Programming</span> and <span>Extensions</span>.”</span> Pre-published June 2. <a href="https://doi.org/10.48550/arXiv.2506.02174">https://doi.org/10.48550/arXiv.2506.02174</a>.
+</div>
+<div id="ref-luCuPDLPjlGPUImplementation2025" class="csl-entry" role="listitem">
+Lu, Haihao, and Jinwen Yang. 2025b. <span>“<span class="nocase">cuPDLP</span>.jl: <span>A GPU Implementation</span> of <span>Restarted Primal-Dual Hybrid Gradient</span> for <span>Linear Programming</span> in <span>Julia</span>.”</span> <em>Operations Research</em> 73 (6): 3440–52. <a href="https://doi.org/10.1287/opre.2024.1069">https://doi.org/10.1287/opre.2024.1069</a>.
+</div>
+<div id="ref-merckxBuildingBridgesJulia2025" class="csl-entry" role="listitem">
+Merckx, Jules. 2025. <span>“Building <span>Bridges</span>: <span>Julia</span> as an <span>MLIR Frontend</span>.”</span> Pre-published February 14. <a href="https://doi.org/10.48550/arXiv.2503.04771">https://doi.org/10.48550/arXiv.2503.04771</a>.
+</div>
+<div id="ref-nicusanAcceleratedKernelsjlCrossArchitectureParallel2025" class="csl-entry" role="listitem">
+Nicusan, Andrei-Leonard, Dominik Werner, Simon Branford, Simon Hartley, Andrew J. Morris, and Kit Windows-Yule. 2025. <span>“<span>AcceleratedKernels</span>.jl: <span>Cross-Architecture Parallel Algorithms</span> from a <span>Unified</span>, <span>Transpiled Codebase</span>.”</span> Pre-published July 22. <a href="https://doi.org/10.48550/arXiv.2507.16710">https://doi.org/10.48550/arXiv.2507.16710</a>.
+</div>
+<div id="ref-perumallaDesignConsiderationsGPUbased2021" class="csl-entry" role="listitem">
+Perumalla, Kalyan, and Maksudul Alam. 2021. <span>“Design <span>Considerations</span> for <span class="nocase">GPU-based Mixed Integer Programming</span> on <span>Parallel Computing Platforms</span>.”</span> (New York, NY, USA), <span>ICPP Workshops</span> ’21, September 23, 1–7. <a href="https://doi.org/10.1145/3458744.3473366">https://doi.org/10.1145/3458744.3473366</a>.
+</div>
+<div id="ref-shinAcceleratingOptimalPower2024" class="csl-entry" role="listitem">
+Shin, Sungho, François Pacaud, and Mihai Anitescu. 2024. <span>“Accelerating <span>Optimal Power Flow</span> with <span>GPUs</span>: <span>SIMD Abstraction</span> of <span>Nonlinear Programs</span> and <span>Condensed-Space Interior-Point Methods</span>.”</span> Pre-published February 26. <a href="http://arxiv.org/abs/2307.16830">http://arxiv.org/abs/2307.16830</a>.
+</div>
+<div id="ref-sountsovRunningMarkovChain2024" class="csl-entry" role="listitem">
+Sountsov, Pavel, Colin Carroll, and Matthew D. Hoffman. 2024. <span>“Running <span>Markov Chain Monte Carlo</span> on <span>Modern Hardware</span> and <span>Software</span>.”</span> Pre-published November 6. <a href="https://doi.org/10.48550/arXiv.2411.04260">https://doi.org/10.48550/arXiv.2411.04260</a>.
+</div>
+<div id="ref-tjusilaCHAPHybridGPUCPU2026" class="csl-entry" role="listitem">
+Tjusila, Gennesaret Kharistio, Alexander Hoen, Nils-Christian Kempke, et al. 2026. <span>“<span>CHAP</span>: <span>A Hybrid GPU-CPU Heuristic</span> for <span>MIP</span>.”</span> Version 1. Pre-published. <a href="https://doi.org/10.48550/ARXIV.2605.05086">https://doi.org/10.48550/ARXIV.2605.05086</a>.
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>stats given for the NVIDIA L40s cards installed on ENPC’s cluster<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>see the <a href="https://github.com/jump-dev/MathOptInterface.jl/issues/2904">batching issue</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, Guillaume Dalle</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

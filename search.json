@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "",
+    "text": "Single cores are no longer getting much faster, computing power increases from parallelism\nInitially designed for computer graphics, processing pixels in parallel\nCUDA (2007) made the switch to a general programming interface\nAlexnet (2012) showed they can be used in deep learning\nMost supercomputing capabilities are now GPU-driven, but they are in every laptop too\n\n\n\n\n\nCPU: few cores optimized for sequential, complex operations, low latency, large memory\nGPU: many cores optimized for parallel, simple operations, high throughput, small memory\nGPUs perform many floating point operations per second (100 TFLOPS on Float32, 100x that of CPUs)1\nGPUs have high memory bandwidth (1000 GB/s, 10x that of CPUs)\n\n\n\n\n\nAdditional complexity: performing more work\nMemory-bound applications\nHeterogeneous, unpredictable input data\nSynchronization operations"
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "",
+    "text": "Single cores are no longer getting much faster, computing power increases from parallelism\nInitially designed for computer graphics, processing pixels in parallel\nCUDA (2007) made the switch to a general programming interface\nAlexnet (2012) showed they can be used in deep learning\nMost supercomputing capabilities are now GPU-driven, but they are in every laptop too\n\n\n\n\n\nCPU: few cores optimized for sequential, complex operations, low latency, large memory\nGPU: many cores optimized for parallel, simple operations, high throughput, small memory\nGPUs perform many floating point operations per second (100 TFLOPS on Float32, 100x that of CPUs)1\nGPUs have high memory bandwidth (1000 GB/s, 10x that of CPUs)\n\n\n\n\n\nAdditional complexity: performing more work\nMemory-bound applications\nHeterogeneous, unpredictable input data\nSynchronization operations"
+  },
+  {
+    "objectID": "index.html#how-a-gpu-works",
+    "href": "index.html#how-a-gpu-works",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "How a GPU works",
+    "text": "How a GPU works\n\nCommunication\n\nCPU is the host, GPUs are the devices\nDevice code is composed of kernels, executed in a data-parallel manner\nKernels are interlaced with host instructions, launched asynchronously\nTransfer of data or instructions between CPU and GPU is expensive\n\n\n\nTheoretical structure\n\nGrid of blocks (1D, 2D or 3D), each with up to 1024 threads\nWithin a block, threads are executed in lockstep\nSingle Instruction, Multiple Thread paradigm\n\n\n\nHardware structure\n\nSeveral Streaming Multiprocessors (142 on the L40s), each with many CUDA cores (128 on the L40s)\nAll threads in a block are assigned to the same SM, but one SM will get several blocks\nThreads within a block are physically in the same place and can interact with one another (synchronization, memory)\nLimited number of SMs + limited number of blocks executed at the same time by an SM = no guarantee on the simultaneity or sequence between two blocks\n\n\n\nWarps and divergence\n\nBlocks are split into warps of 32 threads which are physically executed in lockstep\nIn the presence of control flow, all paths are taken sequentially: one pass for if then one pass for else\nTypical example is boundary conditions (only affects one warp)\n\n\n\nExample kernel\n\nEach thread knows its block and thread ID, which replaces a loop\n\nusing KernelAbstractions\n@kernel function mul2_kernel(A)\n  I = @index(Global)\n  A[I] = 2 * A[I]\nend\n\nGrid and block shapes are specified by host at kernel launch\n\nimport CUDA\ndev = CUDABackend()\nA = ones(1024, 1024)\nev = mul2_kernel(dev, 64)(A, ndrange=size(A))\nsynchronize(dev)\nall(A .== 2.0)\n\n\nMatmul kernel\nGrid maps to output matrix, one thread per dot product:\nusing KernelAbstractions\n\n@kernel function matmul_kernel!(output, a, b)\n    i, j = @index(Global, NTuple)\n    tmp_sum = zero(eltype(output))\n    for k in axes(a, 2)\n        tmp_sum += a[i, k] * b[k, j]\n    end\n    output[i, j] = tmp_sum\nend\n\nfunction matmul!(output, a, b)\n    backend = get_backend(a)\n    kernel! = matmul_kernel!(backend)\n    kernel!(output, a, b, ndrange = size(output))\n    return\nend"
+  },
+  {
+    "objectID": "index.html#performance-considerations",
+    "href": "index.html#performance-considerations",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Performance considerations",
+    "text": "Performance considerations\n\nRoofline model\n\nKey quantity: compute to global memory access ratio (or computational intensity), expressed in FLOP/B\nExample: matrix multiplication\nRoofline diagram: computational intensity (FLOP/B) as X axis, computational throughput (GFLOP/s) as Y axis\nTwo regimes: memory-bound (\\(\\alpha\\) = peak bandwidth in B/s times computational throughput) then compute-bound (\\(\\beta\\) = peak throughput in GB/s)\n\n\n\nMemory hierarchy\n\nHost memory + several kinds of on-device memory\nGlobal memory (or DRAM), per grid\n\nConstant memory, part of global but read-only\nLocal memory, part of global but owned by thread\n\nShared (or scratchpad) memory, per block\nRegisters, per thread\n\n\n\nFighting memory limits\n\nImprove data reuse to reach peak FLOPS\nUse shared memory as scratchpad to store data from global memory\nCoalesce global memory accesses (make sure adjacent threads access adjacent memory locations)\nExample: tiling for matmul\nWarps are ordered linearly (column-major vs row-major, depending on the language)\n\n\n\nResource allocation\n\nHardware-dependent resource allocation enables transparent scalability\n(Too) many threads/warps per SM is good for latency tolerance\nBut each thread induces a certain occupancy (amount of memory, registers, etc)\n\n\n\nLaunching kernels\n\nKernel launch has overhead\nKernel fusion at program scale improves performance"
+  },
+  {
+    "objectID": "index.html#sparse-matrices-and-graphs",
+    "href": "index.html#sparse-matrices-and-graphs",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Sparse matrices and graphs",
+    "text": "Sparse matrices and graphs\n\nSparse matrix formats\n\nCOO (coordinate-wise)\nCSR (row-wise)\nELL (CSR + data padding + transposition)\nSELL (ELL by chunk)\nJDS (CSR + sort by row length)\nHybrids\nTradeoffs:\n\nspace efficiency\naccessibility (coefficient, row, column)\nflexibility (modifying, appending)\n\n\n\n\nSpMV kernels\n\nCOO (one thread per input coefficient): atomic operations\nCSR (one thread per input row): load balancing, divergence and coalescing issues\nELL (one thread per input row): low space efficiency, divergence issues\n\n\n\nAre fancy sparse formats worth it?\n\nFor one-off computations, no\nFor repeated computations, yes\nEither way, SpMV much less efficient than dense equivalent: no data reuse\n\n\n\nGraph algorithms with linear algebra\n\nGraphBLAS specification\nCustom semirings\nExample: BFS"
+  },
+  {
+    "objectID": "index.html#shortest-paths-and-preprocessing",
+    "href": "index.html#shortest-paths-and-preprocessing",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Shortest paths and preprocessing",
+    "text": "Shortest paths and preprocessing\n\nForget about Dijkstra\n\nReal graphs are huge but don’t move\nPreprocessing the graph can lead to huge speedups (6 orders of magnitude)\nDone in practice for continental-size applications like Google Maps\nNeeds adaptation if the weights change\n\n\n\nOther applications of preprocessing\n\nDecomposition methods (multicommodity flow)\nFixed point algorithms (traffic assignment)\nDecision-focused learning\n\n\n\nContraction hierarchies\n\nIteratively contract nodes according to a priority order\nAdd shortcuts to preserve shortest path distances while reducing diameter\nAt query time, search in shallow acyclic graphs\nBetter ordering means longer preprocessing but less fill-in\n\n\n\nRunning it on the GPU (PHAST)\n\nGet rid of expensive data structures (priority queues)\nImprove memory locality by reordering vertices\nIn the topological order, process levels in parallel\nProcess several shortest path trees in parallel"
+  },
+  {
+    "objectID": "index.html#linear-and-integer-programming",
+    "href": "index.html#linear-and-integer-programming",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Linear and integer programming",
+    "text": "Linear and integer programming\n\nAlgorithms for LP\n\nSimplex: variable-wise updates, linear solve\nInterior point: linear solve\nPrimal-dual methods: no linear solve\nVisualization on https://lpviz.net/\n\n\n\nWhat’s wrong with linear solves\n\nMemory overhead of the factorization\nSparse factorization and updates\nDoesn’t scale well on GPU\nNot necessarily the bottleneck\n\n\n\nPDLP\n\nFirst-order algorithm with primal and dual variables\nJust matrix-vector multiplications (SpMV)\nLow precision, high scalability\nOriginal CPU and GPU implementations in Julia (Google, then MIT)\n\n\n\nWhat makes it go brrrr\n\nPreconditioning\nRestarting\nAdaptive step size\nAveraging / reflection\nFeasibility polishing\n\n\n\nAreas of improvement\n\nPresolve\nCrossover\nHyperparameter tuning\n\n\n\nAlgorithms for MILP\n\nBranch & bound: very sequential\nCutting planes: very sequential\nPrimal heuristics: sometimes parallelizable\n\n\n\nGPU-friendly MILP heuristics\n\nPDLP as the relaxation solver\nFeasibility pump\nFix-and-propagate\nLarge neighborhood search\nCollaboration between CPU and GPU"
+  },
+  {
+    "objectID": "index.html#julia-tooling",
+    "href": "index.html#julia-tooling",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Julia tooling",
+    "text": "Julia tooling\n\nCUDA-specific code\n\nCUDA.jl\nMath libraries: cuBLAS.jl, cuSPARSE.jl, etc.\ncuTile.jl\n\n\n\nHardware-agnostic code\n\nGPUArrays.jl\nKernelAbstractions.jl\nAcceleratedKernels.jl\nReactant.jl\n\n\n\nDeep learning\n\nEnzyme.jl\nLux.jl\n\n\n\nMathematical programming\nModeling (including batched):\n\nJuMP.jl2\nConvex.jl\nExaModels.jl\nBatchNLPKernels.jl\nExperimental: BatchOptInterface.jl, BatchQuadraticModels.jl\n\nSolvers:\n\nClarabel.jl\nCoolPDLP.jl\ncuOpt.jl\ncuPDLPx.jl\nMadIPM.jl\nMadNLP.jl\nSCS.jl\n\n\n\nGraph algorithms\nNothing… yet"
+  },
+  {
+    "objectID": "index.html#python-tooling",
+    "href": "index.html#python-tooling",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Python tooling",
+    "text": "Python tooling\n\nCUDA-specific code\n\ncupy\nnvmath-python\ncutile-python\n\n\n\nHardware-agnostic code\n\nArray API\nDLPack\nnumba\ntriton\nPallas\n\n\n\nDeep learning\n\nPyTorch\nJAX\n\n\n\nMathematical programming\nModeling:\n\ncvxpy\npyomo\n\nSolvers:\n\ncuopt\nMPAX\n\n\n\nGraph algorithms\n\nnetworkx\ncugraph"
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "References",
+    "text": "References\n\n\nApplegate, David, Mateo Diaz Diaz, Oliver Hinder, et al. 2021. “Practical Large-Scale Linear Programming Using Primal-Dual Hybrid Gradient.” Paper presented Thirty-Fifth Conference on Neural Information Processing Systems. May 21. https://openreview.net/forum?id=_eXwwWOyqT_.\n\n\nBesard, Tim, Christophe Foket, and Bjorn De Sutter. 2019. “Effective Extensible Programming: Unleashing Julia on GPUs.” IEEE Transactions on Parallel and Distributed Systems 30 (4): 827–41. https://doi.org/10.1109/TPDS.2018.2872064.\n\n\nBlin, Nicolas, Stefano Gualandi, Christopher Maes, Andrea Lodi, and Bartolomeo Stellato. 2026. “Batched First-Order Methods for Parallel LP Solving in MIP.” Version 1. Pre-published. https://doi.org/10.48550/ARXIV.2601.21990.\n\n\nÇördük, Akif, Piotr Sielski, Alice Boucher, and Kumar Aatish. 2025. “GPU-Accelerated Primal Heuristics for Mixed Integer Programming.” Pre-published October 23. https://doi.org/10.48550/arXiv.2510.20499.\n\n\nHijma, Pieter, Stijn Heldens, Alessio Sclocco, Ben van Werkhoven, and Henri E. Bal. 2023. “Optimization Techniques for GPU Programming.” ACM Comput. Surv. 55 (11): 239:1–81. https://doi.org/10.1145/3570638.\n\n\nHwu, Wen-mei W., David B. Kirk, and Izzat El Hajj. 2022. Programming Massively Parallel Processors: A Hands-on Approach. Morgan Kaufmann. https://books.google.com?id=7H9dEAAAQBAJ.\n\n\nKepner, Jeremy, Peter Aaltonen, David Bader, et al. 2016. “Mathematical Foundations of the GraphBLAS.” 2016 IEEE High Performance Extreme Computing Conference (HPEC), September, 1–9. https://doi.org/10.1109/HPEC.2016.7761646.\n\n\nLu, Haihao, Zedong Peng, and Jinwen Yang. 2024. “MPAX: Mathematical Programming in JAX.” Pre-published December 12. https://doi.org/10.48550/arXiv.2412.09734.\n\n\nLu, Haihao, and Jinwen Yang. 2025a. “An Overview of GPU-based First-Order Methods for Linear Programming and Extensions.” Pre-published June 2. https://doi.org/10.48550/arXiv.2506.02174.\n\n\nLu, Haihao, and Jinwen Yang. 2025b. “cuPDLP.jl: A GPU Implementation of Restarted Primal-Dual Hybrid Gradient for Linear Programming in Julia.” Operations Research 73 (6): 3440–52. https://doi.org/10.1287/opre.2024.1069.\n\n\nMerckx, Jules. 2025. “Building Bridges: Julia as an MLIR Frontend.” Pre-published February 14. https://doi.org/10.48550/arXiv.2503.04771.\n\n\nNicusan, Andrei-Leonard, Dominik Werner, Simon Branford, Simon Hartley, Andrew J. Morris, and Kit Windows-Yule. 2025. “AcceleratedKernels.jl: Cross-Architecture Parallel Algorithms from a Unified, Transpiled Codebase.” Pre-published July 22. https://doi.org/10.48550/arXiv.2507.16710.\n\n\nPerumalla, Kalyan, and Maksudul Alam. 2021. “Design Considerations for GPU-based Mixed Integer Programming on Parallel Computing Platforms.” (New York, NY, USA), ICPP Workshops ’21, September 23, 1–7. https://doi.org/10.1145/3458744.3473366.\n\n\nShin, Sungho, François Pacaud, and Mihai Anitescu. 2024. “Accelerating Optimal Power Flow with GPUs: SIMD Abstraction of Nonlinear Programs and Condensed-Space Interior-Point Methods.” Pre-published February 26. http://arxiv.org/abs/2307.16830.\n\n\nSountsov, Pavel, Colin Carroll, and Matthew D. Hoffman. 2024. “Running Markov Chain Monte Carlo on Modern Hardware and Software.” Pre-published November 6. https://doi.org/10.48550/arXiv.2411.04260.\n\n\nTjusila, Gennesaret Kharistio, Alexander Hoen, Nils-Christian Kempke, et al. 2026. “CHAP: A Hybrid GPU-CPU Heuristic for MIP.” Version 1. Pre-published. https://doi.org/10.48550/ARXIV.2605.05086."
+  },
+  {
+    "objectID": "index.html#footnotes",
+    "href": "index.html#footnotes",
+    "title": "Speeding up operations research algorithms on parallel hardware",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nstats given for the NVIDIA L40s cards installed on ENPC’s cluster↩︎\nsee the batching issue↩︎"
+  }
+]
