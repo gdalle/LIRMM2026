@@ -8,12 +8,30 @@
   langid = {english}
 }
 
+@incollection{bastRoutePlanningTransportation2016,
+  title = {Route {{Planning}} in {{Transportation Networks}}},
+  booktitle = {Algorithm {{Engineering}}: {{Selected Results}} and {{Surveys}}},
+  author = {Bast, Hannah and Delling, Daniel and Goldberg, Andrew and Müller-Hannemann, Matthias and Pajor, Thomas and Sanders, Peter and Wagner, Dorothea and Werneck, Renato F.},
+  editor = {Kliemann, Lasse and Sanders, Peter},
+  date = {2016},
+  series = {Lecture {{Notes}} in {{Computer Science}}},
+  pages = {19--80},
+  publisher = {Springer International Publishing},
+  location = {Cham},
+  doi = {10.1007/978-3-319-49487-6_2},
+  url = {https://doi.org/10.1007/978-3-319-49487-6_2},
+  abstract = {We survey recent advances in algorithms for route planning in transportation networks. For road networks, we show that one can compute driving directions in milliseconds or less even at continental scale. A variety of techniques provide different trade-offs between preprocessing effort, space requirements, and query time. Some algorithms can answer queries in a fraction of a microsecond, while others can deal efficiently with real-time traffic. Journey planning on public transportation systems, although conceptually similar, is a significantly harder problem due to its inherent time-dependent and multicriteria nature. Although exact algorithms are fast enough for interactive queries on metropolitan transit systems, dealing with continent-sized instances requires simplifications or heavy preprocessing. The multimodal route planning problem, which seeks journeys combining schedule-based transportation (buses, trains) with unrestricted modes (walking, driving), is even harder, relying on approximate solutions even for metropolitan inputs.},
+  isbn = {978-3-319-49487-6},
+  langid = {english}
+}
+
 @article{besardEffectiveExtensibleProgramming2019,
   title = {Effective {{Extensible Programming}}: {{Unleashing Julia}} on {{GPUs}}},
   shorttitle = {Effective {{Extensible Programming}}},
   author = {Besard, Tim and Foket, Christophe and De Sutter, Bjorn},
   date = {2019-04},
   journaltitle = {IEEE Transactions on Parallel and Distributed Systems},
+  shortjournal = {IEEE Trans. Parallel Distrib. Syst.},
   volume = {30},
   number = {4},
   pages = {827--841},
@@ -48,6 +66,37 @@
   pubstate = {prepublished}
 }
 
+@article{dellingPHASTHardwareacceleratedShortest2013,
+  title = {{{PHAST}}: {{Hardware}}-Accelerated Shortest Path Trees},
+  shorttitle = {{{PHAST}}},
+  author = {Delling, Daniel and Goldberg, Andrew V. and Nowatzyk, Andreas and Werneck, Renato F.},
+  date = {2013-07-01},
+  journaltitle = {Journal of Parallel and Distributed Computing},
+  shortjournal = {J. Parallel Distrib. Comput.},
+  series = {Best {{Papers}}: {{International Parallel}} and {{Distributed Processing Symposium}} ({{IPDPS}}) 2010, 2011 and 2012},
+  volume = {73},
+  number = {7},
+  pages = {940--952},
+  issn = {0743-7315},
+  doi = {10.1016/j.jpdc.2012.02.007},
+  url = {https://www.sciencedirect.com/science/article/pii/S074373151200041X},
+  abstract = {We present a novel algorithm to solve the non-negative single-source shortest path problem on road networks and graphs with low highway dimension. After a quick preprocessing phase, we can compute all distances from a given source in the graph with essentially a linear sweep over all vertices. Because this sweep is independent of the source, we are able to reorder vertices in advance to exploit locality. Moreover, our algorithm takes advantage of features of modern CPU architectures, such as SSE and multiple cores. Compared to Dijkstra’s algorithm, our method needs fewer operations, has better locality, and is better able to exploit parallelism at multi-core and instruction levels. We gain additional speedup when implementing our algorithm on a GPU, where it is up to three orders of magnitude faster than Dijkstra’s algorithm on a high-end CPU. This makes applications based on all-pairs shortest-paths practical for continental-sized road networks. Several algorithms, such as computing the graph diameter, arc flags, or exact reaches, can be greatly accelerated by our method.}
+}
+
+@online{grandLpvizInteractiveLinear2026,
+  title = {Lpviz: {{Interactive Linear Programming Visualization}}},
+  shorttitle = {Lpviz},
+  author = {Grand, Evan and Klamkin, Michael},
+  date = {2026-04-30},
+  eprint = {2604.27518},
+  eprinttype = {arXiv},
+  eprintclass = {cs.HC},
+  doi = {10.48550/arXiv.2604.27518},
+  url = {http://arxiv.org/abs/2604.27518},
+  abstract = {This paper presents lpviz, a browser-based visualization tool for linear programming. lpviz is deeply interactive, offering an intuitive interface where users can directly draw and edit the feasible region and objective vector, without requiring cumbersome manipulation of raw numerical coefficients. lpviz lets users compare the behavior of several classes of linear programming algorithms, namely Simplex, Interior-Point, Primal-Dual Hybrid Gradient, and Central Path. In the 3D mode, lpviz places iterates at heights corresponding to important solver metadata such as complementarity gap or KKT residual, helping users gain further insight into algorithm behavior beyond the primal iterates alone. lpviz has been used in both research and classroom settings, to help develop intuition for the strengths and weaknesses of different solvers and the impact of solver settings on convergence behavior. lpviz is open-source, permissively licensed, and freely available on any device with a web browser at https://lpviz.net .},
+  pubstate = {prepublished}
+}
+
 @article{hijmaOptimizationTechniquesGPU2023,
   title = {Optimization {{Techniques}} for {{GPU Programming}}},
   author = {Hijma, Pieter and Heldens, Stijn and Sclocco, Alessio and family=Werkhoven, given=Ben, prefix=van, useprefix=true and Bal, Henri E.},
@@ -63,7 +112,7 @@
 }
 
 @book{hwuProgrammingMassivelyParallel2022,
-  title = {Programming {{Massively Parallel Processors}}: {{A Hands-on Approach}}},
+  title = {Programming {{Massively Parallel Processors}}: {{A Hands}}-on {{Approach}}},
   shorttitle = {Programming {{Massively Parallel Processors}}},
   author = {Hwu, Wen-mei W. and Kirk, David B. and Hajj, Izzat El},
   date = {2022-05-28},
@@ -94,6 +143,7 @@
   author = {Lu, Haihao and Yang, Jinwen},
   date = {2025-11},
   journaltitle = {Operations Research},
+  shortjournal = {Oper. Res.},
   volume = {73},
   number = {6},
   pages = {3440--3452},
@@ -119,7 +169,7 @@
 }
 
 @online{luOverviewGPUbasedFirstOrder2025,
-  title = {An {{Overview}} of {{GPU-based First-Order Methods}} for {{Linear Programming}} and {{Extensions}}},
+  title = {An {{Overview}} of {{GPU}}-Based {{First-Order Methods}} for {{Linear Programming}} and {{Extensions}}},
   author = {Lu, Haihao and Yang, Jinwen},
   date = {2025-06-02},
   eprint = {2506.02174},
@@ -129,6 +179,22 @@
   url = {http://arxiv.org/abs/2506.02174},
   abstract = {The rapid progress in GPU computing has revolutionized many fields, yet its potential in mathematical programming, such as linear programming (LP), has only recently begun to be realized. This survey aims to provide a comprehensive overview of recent advancements in GPU-based first-order methods for LP, with a particular focus on the design and development of cuPDLP. We begin by presenting the design principles and algorithmic foundation of the primal-dual hybrid gradient (PDHG) method, which forms the core of the solver. Practical enhancements, such as adaptive restarts, preconditioning, Halpern-type acceleration and infeasibility detection, are discussed in detail, along with empirical comparisons against industrial-grade solvers, highlighting the scalability and efficiency of cuPDLP. We also provide a unified theoretical framework for understanding PDHG, covering both classical and recent results on sublinear and linear convergence under sharpness conditions. Finally, we extend the discussion to GPU-based optimization beyond LP, including quadratic, semidefinite, conic, and nonlinear programming.},
   pubstate = {prepublished}
+}
+
+@article{mandiDecisionFocusedLearningFoundations2024,
+  title = {Decision-{{Focused Learning}}: {{Foundations}}, {{State}} of the {{Art}}, {{Benchmark}} and {{Future Opportunities}}},
+  shorttitle = {Decision-{{Focused Learning}}},
+  author = {Mandi, Jayanta and Kotary, James and Berden, Senne and Mulamba, Maxime and Bucarey, Victor and Guns, Tias and Fioretto, Ferdinando},
+  date = {2024-08-31},
+  journaltitle = {Journal of Artificial Intelligence Research},
+  shortjournal = {J. Artif. Intell. Res.},
+  volume = {80},
+  pages = {1623--1701},
+  issn = {1076-9757},
+  doi = {10.1613/jair.1.15320},
+  url = {https://www.jair.org/index.php/jair/article/view/15320},
+  abstract = {Decision-focused learning (DFL) is an emerging paradigm that integrates machine learning (ML) and constrained optimization to enhance decision quality by training ML models in an end-to-end system. This approach shows significant potential to revolutionize combinatorial decision-making in real-world applications that operate under uncertainty, where estimating unknown parameters within decision models is a major challenge. This paper presents a comprehensive review of DFL, providing an in-depth analysis of both gradient-based and gradient-free techniques used to combine ML and constrained optimization. It evaluates the strengths and limitations of these techniques and includes an extensive empirical evaluation of eleven methods across seven problems. The survey also offers insights into recent advancements and future research directions in DFL.},
+  langid = {english}
 }
 
 @online{merckxBuildingBridgesJulia2025,
@@ -161,7 +227,7 @@
 }
 
 @inproceedings{perumallaDesignConsiderationsGPUbased2021,
-  title = {Design {{Considerations}} for {{GPU-based Mixed Integer Programming}} on {{Parallel Computing Platforms}}},
+  title = {Design {{Considerations}} for {{GPU}}-Based {{Mixed Integer Programming}} on {{Parallel Computing Platforms}}},
   author = {Perumalla, Kalyan and Alam, Maksudul},
   date = {2021-09-23},
   series = {{{ICPP Workshops}} '21},
